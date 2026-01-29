@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Pretendard";
+  /* line-height */
+  --leading-140: 140%;
+  /* letter-spacing */
+  --tracking-tight-custom: -0.025em;
+
+  /* CSS 변수 */
+  --color-sub1: #696969;
+  --color-sub2: #989898;
+
+  --color-black1: #000000;
+  --color-black2: #171717;
+  --color-balckWorm: #494949;
+
+  --color-white1: #ffffff;
+  --color-white2: #f8f8f8;
+  --color-white3: #f9f9f9;
+
+  --color-muted: #efefef;
+
+  --color-blue: #4285f4;
+  --color-blue3: #8299b4;
+  --color-blue4: #518bd5;
+  --color-blue5: #354d67;
+
+  --color-gray1: #b2b2b2;
+  --color-gray2: #d9d9d9;
+  --color-gray3: #8a8a8a;
+  --color-gray4: #989898;
+  --color-gray5: #959595;
+  --color-gray6: #bec6cf;
+
+  --color-pink: #d09a9f;
+  --color-red: #e94235;
+  --color-yellow: #fbbc04;
+  --color-green: #34a853;
+  --color-button-active: #003f87b3;
+}
+
+a {
+  text-decoration: none;
+}
