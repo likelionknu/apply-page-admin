@@ -8,7 +8,6 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="*" element={<PendingPage />} />
         <Route path="/admin" element={<AdminLoginPage />} />
         <Route
           path="/admin/user-dashboard"
@@ -18,6 +17,7 @@ function AppRouter() {
           path="/admin/announcements"
           element={<AdminAnnouncementPage />}
         />
+        <Route path="*" element={<PendingPage />} />
       </Routes>
     </BrowserRouter>
   );
