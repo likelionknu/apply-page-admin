@@ -58,7 +58,7 @@ function AdminUserDashboardPage() {
     <div className="min-h-screen w-full bg-black">
       <Header />
 
-      <div className="flex">
+      <div className="flex justify-center">
         <SideNav />
 
         {/* 메인 콘텐츠 */}
