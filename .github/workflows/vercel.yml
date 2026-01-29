@@ -34,6 +34,4 @@ jobs:
           pnpm dlx vercel deploy \
             --prod \
             --yes \
-            --token=${{ secrets.VERCEL_TOKEN }} \
-            --org=${{ secrets.VERCEL_ORG_ID }} \
-            --project=${{ secrets.VERCEL_PROJECT_ID }}
+            --token=${{ secrets.VERCEL_TOKEN }}
