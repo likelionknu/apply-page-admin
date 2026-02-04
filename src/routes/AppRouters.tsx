@@ -1,14 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import PendingPage from "../shared/PendingPage";
-import AdminAnnouncementPage from "../features/admin/pages/AdminAnnouncementPage";
-import AdminUserDashboardPage from "../features/admin/pages/AdminUserDashboardPage";
-import AdminLoginPage from "../features/admin/pages/AdminLoginPage";
+import AdminLoginPage from "../features/main/pages/AdminLoginPage";
+import AdminUserDashboardPage from "../features/userlist/pages/AdminUserDashboardPage";
+import AdminAnnouncementPage from "../features/announce/pages/AdminAnnouncementPage";
 
 function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/admin" element={<AdminLoginPage />} />
         <Route
           path="/admin/user-dashboard"
           element={<AdminUserDashboardPage />}
@@ -17,7 +15,7 @@ function AppRouter() {
           path="/admin/announcements"
           element={<AdminAnnouncementPage />}
         />
-        <Route path="*" element={<PendingPage />} />
+        <Route path="*" element={<AdminLoginPage />} />
       </Routes>
     </BrowserRouter>
   );
