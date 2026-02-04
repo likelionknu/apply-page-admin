@@ -1,3 +1,4 @@
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Modal from "./components/Modal";
 
@@ -13,6 +14,7 @@ function PendingPage() {
           </span>
         </Modal.Description>
       </Modal>
+      <Footer />
     </div>
   );
 }

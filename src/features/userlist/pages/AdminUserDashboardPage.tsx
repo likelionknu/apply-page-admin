@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Header from "../../../shared/components/Header";
 import Modal from "../../../shared/components/Modal";
-import SideNav from "../components/SideNav";
 
 export interface User {
   id: number;
@@ -59,8 +58,6 @@ function AdminUserDashboardPage() {
       <Header />
 
       <div className="flex justify-center">
-        <SideNav />
-
         {/* 메인 콘텐츠 */}
         <div className="mt-36 flex w-360 flex-col gap-6 p-10 text-white">
           <div className="between flex items-center justify-between">
