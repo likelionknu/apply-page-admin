@@ -13,6 +13,7 @@
 
   --color-black1: #000000;
   --color-black2: #171717;
+  --color-black3: #1d1d1d;
   --color-balckWorm: #494949;
 
   --color-white1: #ffffff;
@@ -32,11 +33,13 @@
   --color-gray4: #989898;
   --color-gray5: #959595;
   --color-gray6: #bec6cf;
+  --color-gray7: #717171;
 
   --color-pink: #d09a9f;
   --color-red: #e94235;
   --color-yellow: #fbbc04;
   --color-green: #34a853;
+  --color-purple: #756def;
   --color-button-active: #003f87b3;
 }
 
