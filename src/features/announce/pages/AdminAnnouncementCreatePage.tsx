@@ -2,21 +2,36 @@ import { useMemo, useState } from "react";
 import Footer from "../../../shared/components/Footer";
 import Header from "../../../shared/components/Header";
 
-type Filter = "전체" | "예정" | "모집 중" | "종료";
+type Filter = "전체" | "예정" | "모집 중" | "완료";
 
 type Announcement = {
   id: string;
-  status: "모집 중" | "종료";
+  status: "모집 중" | "완료";
   title: string;
   period: string;
   stats: string; 
 };
 
-const MOCK: Announcement[] = Array.from({ length: 9 }).map((_, i) => ({
-  id: `a-${i + 1}`,
+const FILTER_OPTIONS: { value: Filter; label: string }[] = [
+  { value: "전체", label: "전체" },
+  { value: "예정", label: "예정" },
+  { value: "모집 중", label: "모집 중" },
+  { value: "완료", label: "종료" },
+];
+
+const MOCK_OPEN: Announcement[] = Array.from({ length: 9 }).map((_, i) => ({
+  id: `a-open-${i + 1}`,
   status: "모집 중",
   title: "14기 강남대학교 멋쟁이사자처럼 아기사자 모집 - 백엔드 파트",
   period: "2025.00.00 00:00 ~ 2026.00.00 00:00",
+  stats: "제출 32 · 임시저장 3",
+}));
+
+const MOCK_ENDED: Announcement[] = Array.from({ length: 9 }).map((_, i) => ({
+  id: `a-ended-${i + 1}`,
+  status: "완료",
+  title: "13기 강남대학교 멋쟁이사자처럼 아기사자 모집 - 프론트엔드 파트",
+  period: "2024.00.00 00:00 ~ 2025.00.00 00:00",
   stats: "제출 32 · 임시저장 3",
 }));
 
@@ -24,11 +39,15 @@ function AdminAnnouncementCreatePage() {
   const [filter, setFilter] = useState<Filter>("전체");
   const [open, setOpen] = useState(false);
 
+  const filterLabel = useMemo(() => {
+    return FILTER_OPTIONS.find((x) => x.value === filter)?.label ?? filter;
+  }, [filter]);
+
   const filtered = useMemo(() => {
-    if (filter === "전체") return MOCK;
-    if (filter === "모집 중") return MOCK.filter((x) => x.status === "모집 중");
-    if (filter === "종료") return MOCK.filter((x) => x.status === "종료");
-    return MOCK;
+    if (filter === "전체") return MOCK_OPEN;
+    if (filter === "모집 중") return MOCK_OPEN;
+    if (filter === "완료") return MOCK_ENDED;
+    return MOCK_OPEN;
   }, [filter]);
 
   return (
@@ -56,7 +75,7 @@ function AdminAnnouncementCreatePage() {
                     "border border-white/10",
                   ].join(" ")}
                 >
-                  <span>{filter}</span>
+                  <span>{filterLabel}</span>
                   <svg
                     width="16"
                     height="16"
@@ -88,15 +107,14 @@ function AdminAnnouncementCreatePage() {
                         "overflow-hidden",
                       ].join(" ")}
                     >
-                      {(["전체", "예정", "모집 중", "종료"] as Filter[]).map(
-                        (v) => {
-                          const active = v === filter;
+                      {FILTER_OPTIONS.map((option) => {
+                          const active = option.value === filter;
                           return (
                             <button
-                              key={v}
+                              key={option.value}
                               type="button"
                               onClick={() => {
-                                setFilter(v);
+                                setFilter(option.value);
                                 setOpen(false);
                               }}
                               className={[
@@ -105,11 +123,10 @@ function AdminAnnouncementCreatePage() {
                                 "hover:bg-white/5",
                               ].join(" ")}
                             >
-                              {v}
+                              {option.label}
                             </button>
                           );
-                        }
-                      )}
+                        })}
                     </div>
                   </>
                 )}
@@ -154,7 +171,14 @@ function AdminAnnouncementCreatePage() {
                       "flex flex-col",
                     ].join(" ")}
                   >
-                    <div className="text-[11px] font-normal text-[#8B5CF6]">
+                    <div
+                      className={[
+                        "text-[11px] font-normal",
+                        item.status === "완료"
+                          ? "text-red-500"
+                          : "text-[#8B5CF6]",
+                      ].join(" ")}
+                    >
                       {item.status}
                     </div>
 
