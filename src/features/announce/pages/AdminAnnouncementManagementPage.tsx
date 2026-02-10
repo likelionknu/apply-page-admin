@@ -35,7 +35,7 @@ const MOCK_ENDED: Announcement[] = Array.from({ length: 9 }).map((_, i) => ({
   stats: "제출 32 · 임시저장 3",
 }));
 
-function AdminAnnouncementCreatePage() {
+function AdminAnnouncementManagementPage() {
   const [filter, setFilter] = useState<Filter>("전체");
   const [open, setOpen] = useState(false);
 
@@ -206,4 +206,4 @@ function AdminAnnouncementCreatePage() {
   );
 }
 
-export default AdminAnnouncementCreatePage;
+export default AdminAnnouncementManagementPage;
