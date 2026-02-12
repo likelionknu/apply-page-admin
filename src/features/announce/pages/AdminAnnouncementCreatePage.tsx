@@ -63,6 +63,7 @@ function AdminAnnouncementCreatePage() {
     });
   };
 
+  // 질문 삭제
   const handleDeleteQuestion = (targetIndex: number) => {
     setRecruitInfo((prev) => {
       const filterdQuestions = prev.questions.filter(
