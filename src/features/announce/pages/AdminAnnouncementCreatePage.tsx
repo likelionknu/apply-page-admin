@@ -1,15 +1,10 @@
 import { useState } from "react";
 import Footer from "../../../shared/components/Footer";
 import Header from "../../../shared/components/Header";
-import Input from "../components/Input";
-import Label from "../components/Label";
-import WarringImg from "../assets/warring.png";
-import RecruitQuestionItem from "../components/RecruitQuestionItem";
-
-interface RecruitQuestions {
-  question: string;
-  priority: number;
-}
+import WarningMessage from "../components/WarningMessage";
+import RecruitInfoSection from "../components/RecruitInfoSection";
+import RecruitQuestionSection from "../components/RecruitQuestionSection";
+import type { RecruitQuestions } from "../types/RecruitQuestion";
 
 interface RecruitQuestion {
   title: string;
@@ -17,25 +12,6 @@ interface RecruitQuestion {
   end_at: string | Date;
   questions: RecruitQuestions[];
 }
-
-const InputLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div className="flex w-full flex-col gap-2">{children}</div>;
-};
-
-const Warring = () => {
-  return (
-    <div className="tracking-tight-custom border-red mt-4 flex items-center gap-7 rounded-[10px] border px-7 py-4 font-medium md:text-[15px]">
-      <img src={WarringImg} alt="경고" className="w-4" />이 공고에 지원서를
-      제출(임시저장 포함)한 사용자가 존재하다면 수정은 거부될 수 있어요
-    </div>
-  );
-};
-
-const formatDate = (date: string | Date) => {
-  if (!date) return "";
-  const d = new Date(date);
-  return d.toISOString().split("T")[0];
-};
 
 function AdminAnnouncementCreatePage() {
   const [recruitInfo, setRecruitInfo] = useState<RecruitQuestion>({
@@ -139,79 +115,33 @@ function AdminAnnouncementCreatePage() {
   return (
     <div className="bg-black1 text-white1 flex w-full flex-col">
       <Header />
+
       <main className="mx-auto mt-30 flex min-h-screen w-full max-w-360 flex-col items-center gap-6">
         <div className="w-full pb-75 md:px-31">
           <div className="tracking-tight-custom font-medium md:text-[30px]">
             모집 공고 등록
           </div>
-          <Warring />
-          <div className="mt-10">
-            <span className="tracking-tight-custom text-gray2 font-medium md:text-[20px]">
-              공고 기본 정보
-            </span>
-            <div className="mt-8">
-              <InputLayout>
-                <Label>모집 공고 명을 입력해주세요.</Label>
-                <Input
-                  placeholder="모집 공고 명"
-                  value={recruitInfo.title}
-                  onChange={handleTitleChange}
-                />
-              </InputLayout>
-              <div className="mt-7 flex gap-7">
-                <InputLayout>
-                  <Label>모집 시작일을 선택해주세요.</Label>
-                  <Input
-                    type="date"
-                    placeholder="2025.01.03"
-                    value={formatDate(recruitInfo.start_at)}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      handleDateChange("start_at", e.target.value)
-                    }
-                  />
-                </InputLayout>
-                <InputLayout>
-                  <Label>모집 종료일을 선택해주세요.</Label>
-                  <Input
-                    type="date"
-                    placeholder="2025.01.03"
-                    value={formatDate(recruitInfo.end_at)}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      handleDateChange("end_at", e.target.value)
-                    }
-                  />
-                </InputLayout>
-              </div>
-            </div>
-          </div>
-          <div className="mt-10">
-            <div className="flex items-center justify-between">
-              <span className="tracking-tight-custom text-gray2 text-[20px] font-medium">
-                공고 입력 질문 설정
-              </span>
-              <div
-                className="tracking-tight-custom text-purple cursor-pointer text-[15px] font-medium"
-                onClick={handleAddQuestion}
-              >
-                <span className="text-[20px]">+</span> 새 질문 추가
-              </div>
-            </div>
-            <div className="mt-7 flex flex-col gap-7">
-              {recruitInfo.questions.map((item, index) => (
-                <RecruitQuestionItem
-                  key={item.priority}
-                  priority={item.priority}
-                  question={item.question}
-                  totalCount={recruitInfo.questions.length}
-                  onPriorityChange={(newPriority) =>
-                    handlePriorityChange(item.priority, newPriority)
-                  }
-                  onQuestionChange={(val) => handleQuestionChange(index, val)}
-                  onDelete={() => handleDeleteQuestion(index)}
-                />
-              ))}
-            </div>
-          </div>
+
+          <WarningMessage />
+
+          {/* 공고 명, 시작 일 종료 일 */}
+          <RecruitInfoSection
+            title={recruitInfo.title}
+            startAt={recruitInfo.start_at}
+            endAt={recruitInfo.end_at}
+            onTitleChange={handleTitleChange}
+            onDateChange={handleDateChange}
+          />
+
+          {/* 공고 질문들 */}
+          <RecruitQuestionSection
+            questions={recruitInfo.questions}
+            onAdd={handleAddQuestion}
+            onDelete={handleDeleteQuestion}
+            onQuestionChange={handleQuestionChange}
+            onPriorityChange={handlePriorityChange}
+          />
+
           <div className="mt-12 w-full text-right">
             <button
               type="button"
@@ -222,6 +152,7 @@ function AdminAnnouncementCreatePage() {
           </div>
         </div>
       </main>
+
       <Footer />
     </div>
   );
