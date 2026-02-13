@@ -1,4 +1,4 @@
-import Input from "./Input";
+import Input from "../../../shared/components/Input";
 import PriorityDropdown from "./PriorityDropdown";
 
 interface RecruitQuestionItemProps {

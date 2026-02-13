@@ -1,4 +1,4 @@
-import Input from "./Input";
+import Input from "../../../shared/components/Input";
 import InputLayout from "./InputLayout";
 import Label from "./Label";
 import SectionHeadr from "./SectionHeader";
