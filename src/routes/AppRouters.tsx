@@ -3,7 +3,7 @@ import AdminLoginPage from "../features/main/pages/AdminLoginPage";
 import AdminUserDashboardPage from "../features/userlist/pages/AdminUserDashboardPage";
 import AdminAnnouncementManagementPage from "../features/announce/pages/AdminAnnouncementManagementPage";
 import AdminAnnouncementPage from "../features/announce/pages/AdminAnnouncementPage";
-import AdminSpecificAnnouncementPage from "../features/specificAnnouncement/pages/AdminSpecificAnnouncementPage";
+import AdminSpecificAnnouncementPage from "../features/specific/pages/AdminSpecificAnnouncementPage";
 import AdminAnnouncementCreatePage from "../features/announce/pages/AdminAnnouncementCreatePage";
 
 function AppRouter() {
