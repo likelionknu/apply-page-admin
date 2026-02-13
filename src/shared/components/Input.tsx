@@ -12,7 +12,7 @@ function Input({ type = "text", placeholder, value, onChange }: InputProps) {
       placeholder={placeholder}
       value={value}
       onChange={onChange}
-      className="bg-black3 w-full rounded-[10px] px-7 py-4"
+      className="bg-admin-box w-full rounded-[10px] px-7 py-4"
     />
   );
 }

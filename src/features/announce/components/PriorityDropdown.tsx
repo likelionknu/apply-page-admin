@@ -26,7 +26,7 @@ function PriorityDropdown({
     <div className="relative md:w-26.75">
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="text-gray2 bg-black3 flex cursor-pointer items-center justify-between rounded-[10px] px-3 py-2 text-[14px] font-medium"
+        className="text-gray2 bg-admin-box flex cursor-pointer items-center justify-between rounded-[10px] px-3 py-2 text-[14px] font-medium"
       >
         <span>순서 {currentPriority}</span>
         <img

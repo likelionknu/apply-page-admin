@@ -113,7 +113,7 @@ function AdminAnnouncementCreatePage() {
   };
 
   return (
-    <div className="bg-black1 text-white1 flex w-full flex-col">
+    <div className="flex w-full flex-col bg-black text-white">
       <Header />
 
       <main className="mx-auto mt-30 flex min-h-screen w-full max-w-360 flex-col items-center gap-6">
@@ -145,7 +145,7 @@ function AdminAnnouncementCreatePage() {
           <div className="mt-12 w-full text-right">
             <button
               type="button"
-              className="text-gray2 bg-black3 cursor-pointer rounded-[10px] px-8 py-2 text-[14px] font-medium contain-paint"
+              className="text-gray2 bg-admin-box cursor-pointer rounded-[10px] px-8 py-2 text-[14px] font-medium contain-paint"
             >
               등록
             </button>

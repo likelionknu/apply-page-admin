@@ -16,7 +16,7 @@ const CancelIcon = ({ onDelete }: { onDelete: () => void }) => {
       onClick={onDelete}
       className="flex cursor-pointer items-center justify-center rounded-[50%] bg-[#E55336] px-2 py-4"
     >
-      <div className="bg-gray2 h-1 w-5"></div>
+      <div className="bg-admin-white h-1 w-5"></div>
     </div>
   );
 };
