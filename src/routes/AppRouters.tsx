@@ -3,6 +3,7 @@ import AdminLoginPage from "../features/main/pages/AdminLoginPage";
 import AdminUserDashboardPage from "../features/userlist/pages/AdminUserDashboardPage";
 import AdminAnnouncementPage from "../features/announce/pages/AdminAnnouncementPage";
 import AdminSpecificAnnouncementPage from "../features/specificAnnouncement/pages/AdminSpecificAnnouncementPage";
+import AdminAnnouncementCreatePage from "../features/announce/pages/AdminAnnouncementCreatePage";
 
 function AppRouter() {
   return (
@@ -15,6 +16,10 @@ function AppRouter() {
         <Route
           path="/admin/announcements"
           element={<AdminAnnouncementPage />}
+        />
+        <Route
+          path="/admin/announcements/create"
+          element={<AdminAnnouncementCreatePage />}
         />
         <Route
           path="/admin/announcements/specific"
