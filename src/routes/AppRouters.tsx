@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminLoginPage from "../features/main/pages/AdminLoginPage";
 import AdminUserDashboardPage from "../features/userlist/pages/AdminUserDashboardPage";
 import AdminAnnouncementPage from "../features/announce/pages/AdminAnnouncementPage";
+import AdminSpecificAnnouncementPage from "../features/specificAnnouncement/pages/AdminSpecificAnnouncementPage";
 import AdminAnnouncementCreatePage from "../features/announce/pages/AdminAnnouncementCreatePage";
 
 function AppRouter() {
@@ -19,6 +20,10 @@ function AppRouter() {
         <Route
           path="/admin/announcements/create"
           element={<AdminAnnouncementCreatePage />}
+        />
+        <Route
+          path="/admin/announcements/specific"
+          element={<AdminSpecificAnnouncementPage />}
         />
         <Route path="*" element={<AdminLoginPage />} />
       </Routes>
