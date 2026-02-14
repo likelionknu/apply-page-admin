@@ -5,6 +5,8 @@ import WarningMessage from "../components/WarningMessage";
 import RecruitInfoSection from "../components/RecruitInfoSection";
 import RecruitQuestionSection from "../components/RecruitQuestionSection";
 import type { RecruitQuestions } from "../types/RecruitQuestion";
+import Modal from "@shared/components/Modal";
+import Button from "@shared/components/Button";
 
 interface RecruitQuestion {
   title: string;
@@ -115,6 +117,20 @@ function AdminAnnouncementCreatePage() {
   return (
     <div className="flex w-full flex-col bg-black text-white">
       <Header />
+
+      <Modal>
+        <Modal.TextLayout>
+          <Modal.Title>나는 모달</Modal.Title>
+          <Modal.Description>
+            이 공고에 지원한 사용자(임시저장 상태 포함)가 존재한다면 이 작업은
+            거부될 수 있어요
+          </Modal.Description>
+        </Modal.TextLayout>
+        <Modal.ButtonLayout>
+          <Button>취소</Button>
+          <Button>확인</Button>
+        </Modal.ButtonLayout>
+      </Modal>
 
       <main className="mx-auto mt-30 flex min-h-screen w-full max-w-360 flex-col items-center gap-6">
         <div className="w-full pb-75 md:px-31">

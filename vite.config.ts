@@ -29,6 +29,10 @@ export default defineConfig({
         find: "@userlist",
         replacement: path.resolve(__dirname, "src/features/userlist"),
       },
+      {
+        find: "@specific",
+        replacement: path.resolve(__dirname, "src/features/specific"),
+      },
     ],
   },
 });
