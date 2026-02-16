@@ -12,7 +12,7 @@ export const AnnouncementDelete = () => {
         공고 삭제
       </div>
 
-      {/* <Modal>
+      <Modal>
         <Modal.TextLayout>
           <Modal.Title>사용자 권한 변경</Modal.Title>
           <Modal.Description>
@@ -30,7 +30,7 @@ export const AnnouncementDelete = () => {
             <Button>확인</Button>
           </div>
         </Modal.ButtonLayout>
-      </Modal> */}
+      </Modal>
     </>
   );
 };
