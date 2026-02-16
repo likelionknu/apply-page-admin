@@ -18,7 +18,7 @@ function ModalTitle({ children }: ModalTextProps) {
 
 function ModalDescription({ children }: ModalTextProps) {
   return (
-    <div className="flex flex-col gap-4 text-[12px] leading-5.75 font-medium tracking-[-0.03em] text-[#e2e2e2] md:mt-10 md:text-[19px]">
+    <div className="tracking-tight-custom text-admin-sub flex max-w-90 flex-col gap-4 pt-3 pl-5 text-left text-[15px] font-medium whitespace-pre-line">
       {children}
     </div>
   );
