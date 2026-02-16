@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_API_URL;
-const TEST_TOKEN = import.meta.env.VITE_TEST_TOKEN;
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -12,7 +11,8 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("accessToken") ?? TEST_TOKEN;
+    // const token = sessionStorage.getItem("accessToken");
+    const token = import.meta.env.VITE_TEST_TOKEN;
 
     if (token) {
       config.headers = config.headers || {};
