@@ -2,8 +2,13 @@ export interface AdminUser {
   id: number;
   name: string;
   email: string;
-  major: string;
+  major?: string;
   createdAt: string;
   lastLogin: string;
-  role: "관리자" | "사용자";
+  role: "사용자" | "관리자";
+
+  phone?: string;
+  grade?: string;
+  department?: string;
+  studentId?: string;
 }

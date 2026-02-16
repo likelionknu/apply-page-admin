@@ -4,6 +4,7 @@ interface Props extends AdminUser {
   order: number;
   selected: boolean;
   onSelect: () => void;
+  onRowClick?: () => void;
 }
 
 function UserRow({
@@ -16,10 +17,12 @@ function UserRow({
   role,
   selected,
   onSelect,
+  onRowClick,
 }: Props) {
   return (
     <div
-      className={`} bg-admin-box grid h-12 cursor-pointer grid-cols-[40px_60px_100px_240px_120px_220px_220px_80px] items-center rounded-[10px] px-4 transition`}
+      onClick={onRowClick}
+      className="bg-admin-box hover:bg-admin-outline-2 grid h-12 cursor-pointer grid-cols-[40px_60px_100px_240px_140px_250px_240px_80px] items-center rounded-[10px] px-4 transition"
     >
       {/* 라디오 버튼 */}
       <div
@@ -31,24 +34,26 @@ function UserRow({
       >
         <div
           className={`h-5 w-5 rounded-full border ${
-            selected ? "border-white bg-white" : "border-gray-500"
+            selected
+              ? "border-admin-white bg-admin-white"
+              : "border-admin-disable"
           }`}
         />
       </div>
 
-      <span className="text-center text-sm">{order}</span>
-      <span className="truncate text-center text-sm">{name}</span>
-      <span className="truncate text-center text-sm">{email}</span>
-      <span className="truncate text-center text-sm">
+      <span className="text-center text-[14px]">{order}</span>
+      <span className="truncate text-center text-[14px]">{name}</span>
+      <span className="truncate text-center text-[14px]">{email}</span>
+      <span className="truncate text-center text-[14px]">
         {major === "미등록" ? (
-          <span className="text-gray-500">{major}</span>
+          <span className="text-admin-disable">{major}</span>
         ) : (
           major
         )}
       </span>
-      <span className="truncate text-center text-sm">{createdAt}</span>
-      <span className="truncate text-center text-sm">{lastLogin}</span>
-      <span className="truncate text-center text-sm">{role}</span>
+      <span className="truncate text-center text-[14px]">{createdAt}</span>
+      <span className="truncate text-center text-[14px]">{lastLogin}</span>
+      <span className="truncate text-center text-[14px]">{role}</span>
     </div>
   );
 }
