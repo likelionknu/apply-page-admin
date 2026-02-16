@@ -27,7 +27,7 @@ function Header() {
             </NavLink>
 
             <NavLink
-              to="/admin/announcements"
+              to="/admin/announcements/management"
               className={({ isActive }) =>
                 `${baseClass} ${isActive ? activeClass : inactiveClass}`
               }
