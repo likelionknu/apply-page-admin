@@ -1,6 +1,6 @@
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <label className="tracking-tight-custom text-[14px] font-medium text-[#6d6d6d]">
+    <label className="tracking-tight-custom text-admin-label text-[13px] font-medium md:text-[14px]">
       {children}
     </label>
   );

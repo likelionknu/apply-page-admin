@@ -141,9 +141,9 @@ function AdminAnnouncementCreatePage() {
         </Modal>
       )}
 
-      <main className="mx-auto mt-30 flex min-h-screen w-full max-w-360 flex-col items-center gap-6">
-        <div className="w-full pb-75 md:px-31">
-          <div className="tracking-tight-custom font-medium md:text-[30px]">
+      <main className="mx-auto mt-30 flex min-h-screen w-full max-w-360 flex-col items-center gap-6 px-6 md:px-31">
+        <div className="w-full pb-75">
+          <div className="tracking-tight-custom text-[24px] font-medium md:text-[30px]">
             모집 공고 등록
           </div>
 
