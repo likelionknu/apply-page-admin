@@ -43,7 +43,7 @@ function ModalTextLayout({ children }: ModalTextProps) {
 
 function ModalMain({ children }: ModalMainProps) {
   return (
-    <div className="absolute top-1/3 left-1/2 z-100 flex min-h-67 w-87 -translate-x-1/2 -translate-y-1/2 rounded-[10px] bg-black md:top-1/2 md:w-107">
+    <div className="fixed top-1/3 left-1/2 z-100 flex min-h-67 w-87 -translate-x-1/2 -translate-y-1/2 rounded-[10px] bg-black md:top-1/2 md:w-107">
       <div className="flex w-full flex-col justify-between text-center text-white">
         {children}
       </div>
