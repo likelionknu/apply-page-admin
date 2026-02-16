@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Footer from "../../../shared/components/Footer";
 import Header from "../../../shared/components/Header";
+import WarningMessage from "../components/WarningMessage";
 import RecruitInfoSection from "../components/RecruitInfoSection";
 import RecruitQuestionSection from "../components/RecruitQuestionSection";
 import type { RecruitQuestions } from "../types/RecruitQuestion";
@@ -14,7 +15,7 @@ interface RecruitQuestion {
   questions: RecruitQuestions[];
 }
 
-function AdminAnnouncementCreatePage() {
+function AdminAnnouncementEditPage() {
   const [recruitInfo, setRecruitInfo] = useState<RecruitQuestion>({
     title: "",
     start_at: "",
@@ -22,6 +23,7 @@ function AdminAnnouncementCreatePage() {
     questions: [],
   });
   const [activeModal, setActiveModal] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   // 질문 추가
   const handleAddQuestion = () => {
@@ -116,6 +118,10 @@ function AdminAnnouncementCreatePage() {
 
   const handleAdd = () => {
     setActiveModal(true);
+    setMessage(
+      `모집 공고를 성공적으로 수정했어요.\n수정한 공고는 즉시 사용자에게 공개돼요.`,
+    );
+    // `요청한 공고를 수정할 수 없어요.\n공고에 지원한 사용자가 있는지 다시 확인해주세요.`
   };
 
   const handleClose = () => {
@@ -129,11 +135,8 @@ function AdminAnnouncementCreatePage() {
       {activeModal && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title onClose={handleClose}>모집 공고 등록</Modal.Title>
-            <Modal.Description>
-              모집 공고를 성공적으로 등록했어요. {"\n"}
-              모집 시작일이 도래하면 자동으로 공고가 공개돼요.
-            </Modal.Description>
+            <Modal.Title onClose={handleClose}>모집 공고 수정</Modal.Title>
+            <Modal.Description>{message}</Modal.Description>
           </Modal.TextLayout>
           <Modal.ButtonLayout>
             <Button onClick={handleClose}>완료</Button>
@@ -144,8 +147,10 @@ function AdminAnnouncementCreatePage() {
       <main className="mx-auto mt-30 flex min-h-screen w-full max-w-360 flex-col items-center gap-6">
         <div className="w-full pb-75 md:px-31">
           <div className="tracking-tight-custom font-medium md:text-[30px]">
-            모집 공고 등록
+            모집 공고 수정
           </div>
+
+          <WarningMessage />
 
           {/* 공고 명, 시작 일 종료 일 */}
           <RecruitInfoSection
@@ -171,7 +176,7 @@ function AdminAnnouncementCreatePage() {
               onClick={handleAdd}
               className="text-gray2 bg-admin-box cursor-pointer rounded-[10px] px-8 py-2 text-[14px] font-medium contain-paint"
             >
-              등록
+              수정
             </button>
           </div>
         </div>
@@ -181,4 +186,4 @@ function AdminAnnouncementCreatePage() {
     </div>
   );
 }
-export default AdminAnnouncementCreatePage;
+export default AdminAnnouncementEditPage;
