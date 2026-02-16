@@ -3,25 +3,32 @@ import CloseImg from "../assets/cancel.png";
 // 최상위 모달 인터페이스
 interface ModalMainProps {
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
 // 하위 모달 텍스트 인터페이스(혹시 모르니)
 interface ModalTextProps {
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
-function ModalTitle({ children }: ModalTextProps) {
+function ModalTitle({ children, onClick }: ModalTextProps) {
   return (
     <div className="tracking-tight-custom border-admin-outline-2 flex items-center justify-between border-b px-5 py-5 text-[20px] font-medium">
       {children}
-      <img src={CloseImg} alt="닫기" className="h-6 w-6" />
+      <img
+        src={CloseImg}
+        alt="닫기"
+        className="h-6 w-6 cursor-pointer"
+        onClick={onClick}
+      />
     </div>
   );
 }
 
 function ModalDescription({ children }: ModalTextProps) {
   return (
-    <div className="tracking-tight-custom text-admin-sub flex max-w-90 flex-col gap-4 pt-3 pl-5 text-left text-[15px] font-medium">
+    <div className="tracking-tight-custom text-admin-sub flex max-w-90 flex-col gap-4 pt-3 pl-5 text-left text-[15px] font-medium whitespace-pre-line">
       {children}
     </div>
   );
@@ -37,7 +44,7 @@ function ModalTextLayout({ children }: ModalTextProps) {
 
 function ModalMain({ children }: ModalMainProps) {
   return (
-    <div className="absolute top-1/3 left-1/2 z-100 flex min-h-67 min-w-107 -translate-x-1/2 -translate-y-1/2 rounded-[10px] bg-black md:top-1/2">
+    <div className="border-admin-outline-2 absolute top-1/3 left-1/2 z-100 flex min-h-67 min-w-107 -translate-x-1/2 -translate-y-1/2 rounded-[10px] border bg-black md:top-1/2">
       <div className="flex w-full flex-col justify-between text-center text-white">
         {children}
       </div>
