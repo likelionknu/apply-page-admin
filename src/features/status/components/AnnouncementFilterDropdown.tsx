@@ -4,15 +4,15 @@ import type { Filter, FilterOption } from "../types/AnnouncementManagement";
 type DropdownSize = "web" | "mobile";
 
 const DROPDOWN_TRIGGER_CLASS: Record<DropdownSize, string> = {
-  web: "flex h-9.25 w-26.75 items-center justify-between rounded-xl border border-admin-outline/10 bg-admin-outline/10 px-3 text-sm font-normal text-admin-white",
+  web: "flex h-9.25 w-26.75 items-center justify-between rounded-xl bg-admin-box px-3 text-sm font-normal text-admin-white",
   mobile:
-    "flex h-9 w-22.75 items-center justify-between rounded-xl border border-admin-outline/10 bg-admin-outline/10 px-3 text-[13px] font-normal text-admin-white",
+    "flex h-9 w-22.75 items-center justify-between rounded-xl bg-admin-box px-3 text-[13px] font-normal text-admin-white",
 };
 
 const DROPDOWN_MENU_CLASS: Record<DropdownSize, string> = {
-  web: "absolute right-0 z-50 mt-2 w-26.75 overflow-hidden rounded-xl border border-admin-outline/10 bg-admin-box/90 shadow-2xl backdrop-blur-md",
+  web: "absolute right-0 z-50 mt-2 w-26.75 overflow-hidden rounded-xl bg-admin-box/90 shadow-2xl backdrop-blur-md",
   mobile:
-    "absolute left-0 z-50 mt-2 w-28 overflow-hidden rounded-xl border border-admin-outline/10 bg-admin-box/90 shadow-2xl backdrop-blur-md",
+    "absolute left-0 z-50 mt-2 w-28 overflow-hidden rounded-xl bg-admin-box/90 shadow-2xl backdrop-blur-md",
 };
 
 interface AnnouncementFilterDropdownProps {

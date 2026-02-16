@@ -55,9 +55,9 @@ const ANNOUNCEMENTS_BY_FILTER: Record<AnnouncementStatus, Announcement[]> = {
 };
 
 const WEB_NEW_ANNOUNCEMENT_BUTTON_CLASS =
-  "h-9.25 w-22.5 rounded-xl border border-admin-outline/10 bg-admin-outline/10 text-sm font-normal text-admin-white";
+  "h-9.25 w-22.5 rounded-xl bg-admin-box text-sm font-normal text-admin-white";
 const MOBILE_NEW_ANNOUNCEMENT_BUTTON_CLASS =
-  "h-9 w-23.75 rounded-xl border border-admin-outline/10 bg-admin-outline/10 text-[13px] font-normal text-admin-white";
+  "h-9 w-23.75 rounded-xl bg-admin-box text-[13px] font-normal text-admin-white";
 
 const MOBILE_FOOTER_DESCRIPTION = `실습실 : 경기도 용인시 기흥구 강남로 40 강남대학교 후생관 104호
 동아리실 : 경기도 용인시 기흥구 강남로 40 강남대학교 후생관 멋쟁이사자처럼
