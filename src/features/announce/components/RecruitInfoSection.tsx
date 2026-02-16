@@ -36,7 +36,7 @@ function RecruitInfoSection({
             onChange={onTitleChange}
           />
         </InputLayout>
-        <div className="mt-7 flex gap-7">
+        <div className="mt-7 flex flex-col gap-7 md:flex-row">
           <InputLayout>
             <Label>모집 시작일을 선택해주세요.</Label>
             <Input

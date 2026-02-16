@@ -1,6 +1,6 @@
 function SectionHeadr({ children }: { children: React.ReactNode }) {
   return (
-    <div className="tracking-tight-custom text-gray2 font-medium md:text-[20px]">
+    <div className="tracking-tight-custom text-gray2 text-[20px] font-medium">
       {children}
     </div>
   );
