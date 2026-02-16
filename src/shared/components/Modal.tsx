@@ -8,20 +8,26 @@ interface ModalMainProps {
 // 하위 모달 텍스트 인터페이스(혹시 모르니)
 interface ModalTextProps {
   children: React.ReactNode;
+  onClose?: () => void;
 }
 
-function ModalTitle({ children }: ModalTextProps) {
+function ModalTitle({ children, onClose }: ModalTextProps) {
   return (
-    <div className="tracking-tight-custom border-admin-outline-2 flex items-center justify-between border-b px-5 py-5 text-[20px] font-medium">
+    <div className="tracking-tight-custom border-admin-outline-2 flex items-center justify-between border-b px-5 py-5 text-[16px] font-medium md:text-[20px]">
       {children}
-      <img src={CloseImg} alt="닫기" className="h-6 w-6" />
+      <img
+        src={CloseImg}
+        alt="닫기"
+        className="h-6 w-6 cursor-pointer"
+        onClick={onClose}
+      />
     </div>
   );
 }
 
 function ModalDescription({ children }: ModalTextProps) {
   return (
-    <div className="tracking-tight-custom text-admin-sub flex max-w-90 flex-col gap-4 pt-3 pl-5 text-left text-[15px] font-medium">
+    <div className="tracking-tight-custom text-admin-sub flex max-w-90 flex-col gap-4 pt-3 pl-5 text-left text-[13px] font-medium whitespace-pre-line md:text-[15px]">
       {children}
     </div>
   );
@@ -37,7 +43,7 @@ function ModalTextLayout({ children }: ModalTextProps) {
 
 function ModalMain({ children }: ModalMainProps) {
   return (
-    <div className="absolute top-1/3 left-1/2 z-100 flex min-h-67 min-w-107 -translate-x-1/2 -translate-y-1/2 rounded-[10px] bg-black md:top-1/2">
+    <div className="fixed top-1/3 left-1/2 z-100 flex min-h-67 w-87 -translate-x-1/2 -translate-y-1/2 rounded-[10px] bg-black md:top-1/2 md:w-107">
       <div className="flex w-full flex-col justify-between text-center text-white">
         {children}
       </div>
