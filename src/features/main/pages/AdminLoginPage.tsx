@@ -74,16 +74,12 @@ function AdminLoginPage() {
               접근 권한이 부족해요{" "}
             </Modal.Title>
             <Modal.Description>
-              {`이 페이지는 운영진을 위한 페이지에요\n일반 지원자는 대표 홈페이지에서 로그인해야 해요`}
+              이 페이지는 운영진을 위한 페이지에요.{"\n"}
+              일반 지원자는 대표 홈페이지에서 로그인해야 해요.
             </Modal.Description>
           </Modal.TextLayout>
           <Modal.ButtonLayout>
-            <div
-              onClick={() => setShowNoAccessModal(false)}
-              className="flex w-full"
-            >
-              <Button>완료</Button>
-            </div>
+            <Button onClick={() => setShowNoAccessModal(false)}>완료</Button>
           </Modal.ButtonLayout>
         </Modal>
       )}

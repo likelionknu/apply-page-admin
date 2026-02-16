@@ -1,35 +1,14 @@
 import Header from "../../../shared/components/Header";
-import Vector from "../assets/Vector.png";
+// import { useState } from "react";
+
 import UnCheckCircle from "../assets/UnCheckCircle.png";
-import UnCheckCircle2 from "../assets/UnCheckCircle2.png";
-
-const AnnouncementQuestion = () => {
-  return (
-    <div className="flex w-full items-center gap-3">
-      <div className="bg-black3 flex h-9 w-28 cursor-pointer items-center justify-between rounded-[10px] px-3.5 py-2.5">
-        <div className="justify-start text-sm font-medium text-[#5A5A5A]">
-          순서 1
-        </div>
-        <img src={Vector} className="h-1.5 w-2.5" />
-      </div>
-      <div className="bg-black3 h-9 w-full rounded-[10px] px-7.5 py-2.5 text-base font-medium text-white">
-        멋쟁이사자처럼 강남대학교에 어떤 계기로 지원하게 되었나요?
-      </div>
-    </div>
-  );
-};
-
-interface AnnouncementButtonProps {
-  text: string;
-}
-
-const AnnouncementButton = ({ text }: AnnouncementButtonProps) => {
-  return (
-    <div className="bg-black3 flex h-9 w-28 items-center justify-center rounded-[10px] text-sm font-medium text-white">
-      {text}
-    </div>
-  );
-};
+import { AdminRow } from "@specific/components/AdminRow";
+import AnnouncementReviewButton from "@specific/components/AnnouncementReviewButton";
+import AdminStateButton from "@specific/components/AdminStatusButton";
+import AnnouncementButton from "@specific/components/AnnouncementCardButton";
+import AnnouncementDateText from "@specific/components/AnnouncementDateText";
+import { AnnouncementDelete } from "@specific/components/AnnouncementDelete";
+import { AnnouncementQuestion } from "@specific/components/AnnouncementQuestion";
 
 interface AnnouncementTitleTextProps {
   text: string;
@@ -41,39 +20,22 @@ const AnnouncementTitleText = ({ text }: AnnouncementTitleTextProps) => {
   );
 };
 
-interface DescriptionTextProps {
-  text: string;
-  mt: number;
-}
-
-const AnnouncementSubText = ({ text, mt }: DescriptionTextProps) => {
-  return (
-    <div
-      className={`text-gray7 line-clamp-1 w-full justify-start text-lg font-medium mt-${mt}`}
-    >
-      {text}
-    </div>
-  );
-};
-
 const AdminSpecificAnnouncementPage = () => (
   <div className="flex justify-center bg-black">
     <Header />
-    <div className="flex h-full w-298.5 flex-col items-center bg-black">
+    <div className="flex h-500 w-298.5 flex-col items-center bg-black">
       <div className="mt-35.5 flex w-full justify-between">
         <div className="line-clamp-1 justify-start text-3xl font-medium text-white">
           14기 강남대학교 멋쟁이사자처럼 아기사자 모집 - 백엔드 파트
         </div>
         <div className="flex gap-4">
-          <div className="bg-black3 flex h-9 w-24 cursor-pointer items-center justify-center rounded-[10px] text-center text-sm font-medium text-white">
-            공고 삭제
-          </div>
-          <div className="bg-black3 flex h-9 w-24 cursor-pointer items-center justify-center rounded-[10px] text-center text-sm font-medium text-white">
+          <AnnouncementDelete />
+          <div className="bg-admin-box flex h-9 w-24 cursor-pointer items-center justify-center rounded-[10px] text-center text-sm font-medium text-white hover:opacity-70">
             공고 수정
           </div>
         </div>
       </div>
-      <AnnouncementSubText text="2025.00.00 00:00 ~ 2026.00.00 00:00" mt={5} />
+      <AnnouncementDateText text="2025.00.00 00:00 ~ 2026.00.00 00:00" mt={5} />
 
       <div className="mt-12 flex w-full flex-col">
         <AnnouncementTitleText text="이 공고에 등록된 질문" />
@@ -85,11 +47,11 @@ const AdminSpecificAnnouncementPage = () => (
       </div>
       <div className="mt-12 flex w-full flex-col">
         <AnnouncementTitleText text="이 공고에 지원한 사용자" />
-        <AnnouncementSubText
+        <AnnouncementDateText
           text="지원서를 탭하면 자세히 볼 수 있어요"
           mt={2.5}
         />
-        <div className="mt-3.5 flex w-full items-center justify-between">
+        <div className="mt-3.5 flex h-9 w-full justify-between">
           <div className="flex w-full items-center gap-2.5">
             <img src={UnCheckCircle} className="h-3.5 w-3.5" />
             <div className="justify-start text-sm font-medium text-white">
@@ -97,41 +59,90 @@ const AdminSpecificAnnouncementPage = () => (
             </div>
           </div>
           <div className="flex w-full items-center gap-2.5">
-            <AnnouncementButton text="지원서 삭제" />
-            <AnnouncementButton text="지원서 삭제" />
-            <AnnouncementButton text="지원서 삭제" />
-            <AnnouncementButton text="지원서 삭제" />
-            <AnnouncementButton text="지원서 삭제" />
-            <AnnouncementButton text="지원서 삭제" />
+            <AnnouncementButton
+              text="지원서 삭제"
+              modalTitle="지원서 삭제"
+              modalDescription="이 사용자의 지원서를 삭제할까요? 
+              이 작업은 되돌릴 수 없어요"
+            />
+
+            <AnnouncementButton
+              text="메모 등록"
+              modalTitle="공고 삭제"
+              modalDescription="이 공고에 지원한 사용자(임시저장 상태 포함)가 
+              존재한다면 이 작업은 거부될 수 있어요."
+            />
+
+            <AnnouncementReviewButton text="검토 변경" />
+            <AdminStateButton text="상태 변경" />
+            <AnnouncementButton
+              text="서류 결과 발송"
+              modalTitle="서류(1차) 결과 이메일 발송"
+              modalDescription="모든 지원서에 대한 서류 결과를 발송할까요? 
+              대상: 지원 상태가 서류 합격 또는 서류 불합격인 사용자"
+            />
+
+            <AnnouncementButton
+              text="최종 결과 발송"
+              modalTitle="최종(2차) 결과 이메일 발송"
+              modalDescription="모든 지원서에 대한 최종 결과를 발송할까요? 
+              대상: 지원 상태가 최종 불합격 또는 최종 합격인 사용자"
+            />
           </div>
         </div>
-        <div className="bg-black3 text-gray7 mt-3 grid h-9 w-[1194px] grid-cols-[118px_111px_154px_257px_262px_170px_94px] items-center rounded-[10px] text-sm font-medium">
-          <div className="pr-0 text-right">순번</div>
-          <div className="pr-0 text-right">이름</div>
-          <div className="pr-0 text-right">학부</div>
-          <div className="pr-0 text-right">운영진 메모</div>
-          <div className="pr-0 text-right">최종 제출일</div>
-          <div className="pr-0 text-right">운영진 검토</div>
-          <div className="pr-0 text-right">지원 상태</div>
-        </div>
-        <div className="mt-2.5 flex w-full flex-col">
-          <div className="bg-black3 text-gray7 mt-3 grid h-9 w-[1194px] grid-cols-[48px_70px_111px_154px_257px_262px_170px_94px] items-center rounded-[10px] text-sm font-medium">
-            {/* 1. 아이콘 영역: 왼쪽 마진 28px 적용 */}
-            <div className="flex justify-start pl-[28px]">
-              <img src={UnCheckCircle2} className="h-5 w-5" alt="checkbox" />
+        <div className="bg-admin-box mt-3 flex h-9 w-298.5 items-center justify-center rounded-[10px]">
+          <div className="flex w-284.5 items-center">
+            <div className="text-admin-sub ml-13 w-12 truncate text-center text-sm font-medium">
+              순번
             </div>
-
-            {/* 2. 순번: 기존 위치 유지를 위해 70px 영역에서 오른쪽 정렬 */}
-            <div className="text-right">1</div>
-
-            {/* 나머지 아이템: 기존 위치 동일 */}
-            <div className="text-right">김찬주</div>
-            <div className="text-right">ict융합공학부</div>
-            <div className="text-right">운영진 메모</div>
-            <div className="text-right">최종 제출일</div>
-            <div className="text-right">운영진 검토</div>
-            <div className="text-right">지원 상태</div>
+            <div className="text-admin-sub ml-13.25 w-16 truncate text-center text-sm font-medium">
+              이름
+            </div>
+            <div className="text-admin-sub ml-12 w-40 truncate text-center text-sm font-medium">
+              학부
+            </div>
+            <div className="text-admin-sub ml-10 w-56 truncate text-center text-sm font-medium">
+              운영진 메모
+            </div>
+            <div className="text-admin-sub ml-9 w-48 truncate text-center text-sm font-medium">
+              최종 제출일
+            </div>
+            <div className="text-admin-sub ml-11.25 w-17 text-center text-sm font-medium">
+              운영진 검토
+            </div>
+            <div className="text-admin-sub ml-8.5 w-17 truncate text-center text-sm font-medium">
+              지원상태
+            </div>
           </div>
+        </div>
+        <div className="mt-2.5 flex w-298.5 flex-col items-center gap-2.5">
+          <AdminRow
+            application_id={1}
+            name="황형진"
+            depart="ICT융합공학부"
+            memo="안녕하세요 안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
+            submitted_at="최종 제출되지 않음"
+            evaluation="미등록"
+            status="임시저장"
+          />
+          <AdminRow
+            application_id={7}
+            name="황형진"
+            depart="ICT융합공학부"
+            memo="미등록"
+            submitted_at="최종 제출되지 않음"
+            evaluation="PASS"
+            status="임시저장"
+          />
+          <AdminRow
+            application_id={15}
+            name="황형진"
+            depart="ICT융합공학부"
+            memo="미등록"
+            submitted_at="최종 제출되지 않음"
+            evaluation="미등록"
+            status="임시저장"
+          />
         </div>
       </div>
     </div>

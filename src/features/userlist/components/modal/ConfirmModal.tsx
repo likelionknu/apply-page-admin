@@ -28,15 +28,9 @@ export default function ConfirmModal({
         </Modal.TextLayout>
 
         <Modal.ButtonLayout>
-          {onCancel && (
-            <div onClick={onCancel} className="flex w-full">
-              <Button>{cancelText}</Button>
-            </div>
-          )}
+          {onCancel && <Button onClick={onCancel}>{cancelText}</Button>}
 
-          <div onClick={onConfirm} className="flex w-full">
-            <Button>{confirmText}</Button>
-          </div>
+          <Button onClick={onConfirm}>{confirmText}</Button>
         </Modal.ButtonLayout>
       </Modal>
     </>
