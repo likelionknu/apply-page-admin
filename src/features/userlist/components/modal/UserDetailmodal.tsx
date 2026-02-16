@@ -83,9 +83,7 @@ export default function UserDetailModal({
                 <Field label="권한" value={currentUser.role} />
               </div>
             </div>
-            <div onClick={onClose} className="flex w-full px-5">
-              <Button>완료</Button>
-            </div>
+            <Button onClick={onClose}>완료</Button>
           </div>
         </Modal.TextLayout>
       </Modal>

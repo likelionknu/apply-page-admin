@@ -55,9 +55,9 @@ const ANNOUNCEMENTS_BY_FILTER: Record<AnnouncementStatus, Announcement[]> = {
 };
 
 const WEB_NEW_ANNOUNCEMENT_BUTTON_CLASS =
-  "h-9.25 w-22.5 rounded-xl border border-admin-outline/10 bg-admin-outline/10 text-sm font-normal text-admin-white";
+  "cursor-pointer h-9.25 w-22.5 rounded-xl border border-admin-outline/10 bg-admin-outline/10 text-sm font-normal text-admin-white";
 const MOBILE_NEW_ANNOUNCEMENT_BUTTON_CLASS =
-  "h-9 w-23.75 rounded-xl border border-admin-outline/10 bg-admin-outline/10 text-[13px] font-normal text-admin-white";
+  "cursor-pointer h-9 w-23.75 rounded-xl border border-admin-outline/10 bg-admin-outline/10 text-[13px] font-normal text-admin-white";
 
 const MOBILE_FOOTER_DESCRIPTION = `실습실 : 경기도 용인시 기흥구 강남로 40 강남대학교 후생관 104호
 동아리실 : 경기도 용인시 기흥구 강남로 40 강남대학교 후생관 멋쟁이사자처럼
@@ -72,10 +72,10 @@ function AdminAnnouncementManagementPage() {
   }, [filter]);
 
   return (
-    <div className="min-h-screen w-full bg-admin-background text-admin-white">
+    <div className="bg-admin-background text-admin-white min-h-screen w-full">
       {/*모바일*/}
       <div className="flex min-h-screen flex-col md:hidden">
-        <header className="flex h-16 items-center justify-between border-b border-admin-outline/10 px-6">
+        <header className="border-admin-outline/10 flex h-16 items-center justify-between border-b px-6">
           <div className="flex items-center gap-2">
             <img src={logoImg} alt="LIKELION KNU" className="w-3.5" />
             <p className="text-lg font-bold tracking-tight">LIKELION KNU</p>
@@ -83,7 +83,7 @@ function AdminAnnouncementManagementPage() {
 
           <button
             type="button"
-            className="flex h-8 w-8 items-center justify-center text-admin-white/90"
+            className="text-admin-white/90 flex h-8 w-8 items-center justify-center"
             aria-label="menu"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -110,7 +110,10 @@ function AdminAnnouncementManagementPage() {
                   size="mobile"
                 />
 
-                <button type="button" className={MOBILE_NEW_ANNOUNCEMENT_BUTTON_CLASS}>
+                <button
+                  type="button"
+                  className={MOBILE_NEW_ANNOUNCEMENT_BUTTON_CLASS}
+                >
                   새 공고 등록
                 </button>
               </div>
@@ -131,7 +134,7 @@ function AdminAnnouncementManagementPage() {
           </div>
         </main>
 
-        <footer className="mt-auto border-t border-admin-outline/10 bg-admin-box px-8 py-9">
+        <footer className="border-admin-outline/10 bg-admin-box mt-auto border-t px-8 py-9">
           <div className="space-y-3 text-sm">
             <p>© 2026 LIKELION KNU. All rights reserved.</p>
             <p className="text-admin-sub leading-6 whitespace-pre-line">
@@ -150,7 +153,9 @@ function AdminAnnouncementManagementPage() {
           <div className="mx-auto w-full max-w-360 px-12 pt-30 pb-16">
             <div className="flex justify-center">
               <div className="flex w-298.5 items-start justify-between">
-                <h1 className="text-3xl font-normal tracking-tight">공고 관리</h1>
+                <h1 className="text-3xl font-normal tracking-tight">
+                  공고 관리
+                </h1>
 
                 <div className="flex items-center gap-3">
                   {/* 공고 상태 필터 드롭다운 */}

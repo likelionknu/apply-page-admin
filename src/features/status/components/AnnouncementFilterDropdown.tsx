@@ -4,9 +4,9 @@ import type { Filter, FilterOption } from "../types/AnnouncementManagement";
 type DropdownSize = "web" | "mobile";
 
 const DROPDOWN_TRIGGER_CLASS: Record<DropdownSize, string> = {
-  web: "flex h-9.25 w-26.75 items-center justify-between rounded-xl border border-admin-outline/10 bg-admin-outline/10 px-3 text-sm font-normal text-admin-white",
+  web: "cursor-pointer flex h-9.25 w-26.75 items-center justify-between rounded-xl border border-admin-outline/10 bg-admin-outline/10 px-3 text-sm font-normal text-admin-white",
   mobile:
-    "flex h-9 w-22.75 items-center justify-between rounded-xl border border-admin-outline/10 bg-admin-outline/10 px-3 text-[13px] font-normal text-admin-white",
+    "cursor-pointer flex h-9 w-22.75 items-center justify-between rounded-xl border border-admin-outline/10 bg-admin-outline/10 px-3 text-[13px] font-normal text-admin-white",
 };
 
 const DROPDOWN_MENU_CLASS: Record<DropdownSize, string> = {
@@ -78,7 +78,7 @@ function AnnouncementFilterDropdown({
                   key={option.value}
                   type="button"
                   onClick={() => handleSelect(option.value)}
-                  className={`w-full px-3 py-2 text-left text-sm font-normal hover:bg-admin-outline/5 ${
+                  className={`hover:bg-admin-outline/5 w-full cursor-pointer px-3 py-2 text-left text-sm font-normal ${
                     active ? "text-admin-white" : "text-admin-sub"
                   }`}
                 >
