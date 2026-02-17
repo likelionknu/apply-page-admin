@@ -35,12 +35,6 @@ function Header() {
             </NavLink>
           </div>
         </div>
-        {/* <div className="flex items-center">
-          <img src={userImg} alt="google" className="w-6" />
-          <p className="tracking-tight-custom ml-2.5 text-base leading-140 font-semibold">
-            황형진
-          </p>
-        </div> */}
         <div className="flex cursor-pointer items-center gap-2">
           <img
             src={userImg}
@@ -48,7 +42,7 @@ function Header() {
             className="bg-admin-box rounded-[50%] p-1.5"
           />
           <span className="text-[16px] leading-140 font-medium tracking-[-0.03em]">
-            {name || "황형진"}
+            {name}
           </span>
         </div>
       </nav>
