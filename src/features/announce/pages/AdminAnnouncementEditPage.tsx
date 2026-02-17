@@ -127,25 +127,30 @@ function AdminAnnouncementEditPage() {
       const apiError = data.error;
 
       if (apiError.code === null) {
-        setActiveModal(true);
         setMessage(
           `모집 공고를 성공적으로 수정했어요.\n수정한 공고는 즉시 사용자에게 공개돼요.`,
         );
+      } else {
+        setMessage(
+          `요청한 공고를 수정할 수 없어요.\n공고에 지원한 사용자가 있는지 다시 확인해주세요.`,
+        );
       }
     } catch (error) {
-      let msg = "서버와 연결할 수 없습니다.";
+      let errorMsg = "알 수 없는 오류가 발생했습니다.";
 
       if (axios.isAxiosError(error)) {
-        if (error.response?.data?.error?.message) {
-          msg = error.response.data.error.message;
-        } else if (error.response?.data?.message) {
-          msg = error.response.data.message;
+        if (error.response) {
+          // 서버가 응답은 줬지만 상태 코드가 2xx가 아님 (400, 404, 500 등)
+          errorMsg = `서버에 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.`;
+        } else if (error.request) {
+          // 요청은 보냈는데 응답을 못 받음 (네트워크 끊김 등)
+          errorMsg = `서버와 연결할 수 없습니다.\n네트워크 상태를 확인해주세요.`;
         }
-      } else if (error instanceof Error) {
-        msg = error.message;
       }
 
-      console.log(msg);
+      setMessage(errorMsg);
+    } finally {
+      setActiveModal(true);
     }
   };
 
