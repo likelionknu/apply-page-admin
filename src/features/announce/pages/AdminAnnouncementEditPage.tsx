@@ -140,10 +140,8 @@ function AdminAnnouncementEditPage() {
 
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          // 서버가 응답은 줬지만 상태 코드가 2xx가 아님 (400, 404, 500 등)
           errorMsg = `서버에 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.`;
         } else if (error.request) {
-          // 요청은 보냈는데 응답을 못 받음 (네트워크 끊김 등)
           errorMsg = `서버와 연결할 수 없습니다.\n네트워크 상태를 확인해주세요.`;
         }
       }
