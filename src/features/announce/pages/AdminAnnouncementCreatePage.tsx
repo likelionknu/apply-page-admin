@@ -3,19 +3,14 @@ import Footer from "../../../shared/components/Footer";
 import Header from "../../../shared/components/Header";
 import RecruitInfoSection from "../components/RecruitInfoSection";
 import RecruitQuestionSection from "../components/RecruitQuestionSection";
-import type { RecruitQuestions } from "../types/RecruitQuestion";
+import type { Recruit } from "../types/RecruitQuestion";
 import Modal from "@shared/components/Modal";
 import Button from "@shared/components/Button";
-
-interface RecruitQuestion {
-  title: string;
-  start_at: string | Date;
-  end_at: string | Date;
-  questions: RecruitQuestions[];
-}
+import { createRecruit } from "@announce/apis";
+import axios from "axios";
 
 function AdminAnnouncementCreatePage() {
-  const [recruitInfo, setRecruitInfo] = useState<RecruitQuestion>({
+  const [recruitInfo, setRecruitInfo] = useState<Recruit>({
     title: "",
     start_at: "",
     end_at: "",
@@ -114,8 +109,33 @@ function AdminAnnouncementCreatePage() {
     });
   };
 
-  const handleAdd = () => {
-    setActiveModal(true);
+  const handleAdd = async () => {
+    console.log(recruitInfo);
+
+    try {
+      const payload = recruitInfo;
+      const { data } = await createRecruit(payload);
+
+      const apiError = data.error;
+
+      if (apiError.code === null) {
+        setActiveModal(true);
+      }
+    } catch (error) {
+      let msg = "서버와 연결할 수 없습니다.";
+
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data?.error?.message) {
+          msg = error.response.data.error.message;
+        } else if (error.response?.data?.message) {
+          msg = error.response.data.message;
+        }
+      } else if (error instanceof Error) {
+        msg = error.message;
+      }
+
+      console.log(msg);
+    }
   };
 
   const handleClose = () => {
@@ -129,7 +149,7 @@ function AdminAnnouncementCreatePage() {
       {activeModal && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title onClose={handleClose}>모집 공고 등록</Modal.Title>
+            <Modal.Title onClick={handleClose}>모집 공고 등록</Modal.Title>
             <Modal.Description>
               모집 공고를 성공적으로 등록했어요. {"\n"}
               모집 시작일이 도래하면 자동으로 공고가 공개돼요.
