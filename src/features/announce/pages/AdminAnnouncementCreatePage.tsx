@@ -1,11 +1,8 @@
 import { useState } from "react";
-import Footer from "../../../shared/components/Footer";
-import Header from "../../../shared/components/Header";
+import { Button, Footer, Header, Modal } from "@shared/components";
 import RecruitInfoSection from "../components/RecruitInfoSection";
 import RecruitQuestionSection from "../components/RecruitQuestionSection";
 import type { Recruit } from "../types/RecruitQuestion";
-import Modal from "@shared/components/Modal";
-import Button from "@shared/components/Button";
 import { createRecruit } from "@announce/apis";
 import axios from "axios";
 
@@ -110,10 +107,9 @@ function AdminAnnouncementCreatePage() {
   };
 
   const handleAdd = async () => {
-    console.log(recruitInfo);
-
     try {
       const payload = recruitInfo;
+
       const { data } = await createRecruit(payload);
 
       const apiError = data.error;

@@ -1,22 +1,17 @@
-import { useState } from "react";
-import Footer from "../../../shared/components/Footer";
-import Header from "../../../shared/components/Header";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { Button, Footer, Header, Modal } from "@shared/components";
 import WarningMessage from "../components/WarningMessage";
 import RecruitInfoSection from "../components/RecruitInfoSection";
 import RecruitQuestionSection from "../components/RecruitQuestionSection";
-import type { RecruitQuestions } from "../types/RecruitQuestion";
-import Modal from "@shared/components/Modal";
-import Button from "@shared/components/Button";
-
-interface RecruitQuestion {
-  title: string;
-  start_at: string | Date;
-  end_at: string | Date;
-  questions: RecruitQuestions[];
-}
+import { editRecruit, getRecruit } from "@announce/apis";
+import type { Recruit } from "../types/RecruitQuestion";
 
 function AdminAnnouncementEditPage() {
-  const [recruitInfo, setRecruitInfo] = useState<RecruitQuestion>({
+  const { recruitId } = useParams<{ recruitId: string }>();
+
+  const [recruitInfo, setRecruitInfo] = useState<Recruit>({
     title: "",
     start_at: "",
     end_at: "",
@@ -116,17 +111,106 @@ function AdminAnnouncementEditPage() {
     });
   };
 
-  const handleAdd = () => {
-    setActiveModal(true);
-    setMessage(
-      `모집 공고를 성공적으로 수정했어요.\n수정한 공고는 즉시 사용자에게 공개돼요.`,
-    );
-    // `요청한 공고를 수정할 수 없어요.\n공고에 지원한 사용자가 있는지 다시 확인해주세요.`
+  const handleEdit = async () => {
+    const id = Number(recruitId);
+
+    if (!recruitId || isNaN(id) || id <= 0) return;
+
+    try {
+      const payload = {
+        recruitId: id,
+        payload: recruitInfo,
+      };
+
+      const { data } = await editRecruit(payload);
+
+      const apiError = data.error;
+
+      if (apiError.code === null) {
+        setActiveModal(true);
+        setMessage(
+          `모집 공고를 성공적으로 수정했어요.\n수정한 공고는 즉시 사용자에게 공개돼요.`,
+        );
+      }
+    } catch (error) {
+      let msg = "서버와 연결할 수 없습니다.";
+
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data?.error?.message) {
+          msg = error.response.data.error.message;
+        } else if (error.response?.data?.message) {
+          msg = error.response.data.message;
+        }
+      } else if (error instanceof Error) {
+        msg = error.message;
+      }
+
+      console.log(msg);
+    }
   };
 
   const handleClose = () => {
     setActiveModal(false);
   };
+
+  useEffect(() => {
+    const id = Number(recruitId);
+
+    if (!recruitId || isNaN(id) || id <= 0) return;
+
+    const fetchRecruit = async () => {
+      try {
+        const res = await getRecruit(id);
+        const recruitData = res?.data?.data;
+
+        if (!recruitData) return;
+
+        const mappedQuestions = Array.isArray(recruitData.questions)
+          ? recruitData.questions.map(
+              (
+                questionItem: string | { question?: string; priority?: number },
+                index: number,
+              ) => {
+                if (typeof questionItem === "string") {
+                  return {
+                    question: questionItem,
+                    priority: index + 1,
+                  };
+                }
+
+                return {
+                  question: questionItem.question ?? "",
+                  priority: questionItem.priority ?? index + 1,
+                };
+              },
+            )
+          : [];
+
+        setRecruitInfo({
+          title: recruitData.title ?? "",
+          start_at: recruitData.start_at ?? "",
+          end_at: recruitData.end_at ?? "",
+          questions: mappedQuestions,
+        });
+      } catch (error) {
+        let msg = "서버와 연결할 수 없습니다.";
+
+        if (axios.isAxiosError(error)) {
+          if (error.response?.data?.error?.message) {
+            msg = error.response.data.error.message;
+          } else if (error.response?.data?.message) {
+            msg = error.response.data.message;
+          }
+        } else if (error instanceof Error) {
+          msg = error.message;
+        }
+
+        console.log(msg);
+      }
+    };
+
+    fetchRecruit();
+  }, [recruitId]);
 
   return (
     <div className="flex w-full flex-col bg-black text-white">
@@ -135,7 +219,7 @@ function AdminAnnouncementEditPage() {
       {activeModal && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title onClose={handleClose}>모집 공고 수정</Modal.Title>
+            <Modal.Title onClick={handleClose}>모집 공고 수정</Modal.Title>
             <Modal.Description>{message}</Modal.Description>
           </Modal.TextLayout>
           <Modal.ButtonLayout>
@@ -173,7 +257,7 @@ function AdminAnnouncementEditPage() {
           <div className="mt-12 w-full text-right">
             <button
               type="button"
-              onClick={handleAdd}
+              onClick={handleEdit}
               className="text-gray2 bg-admin-box cursor-pointer rounded-[10px] px-8 py-2 text-[14px] font-medium contain-paint"
             >
               수정
