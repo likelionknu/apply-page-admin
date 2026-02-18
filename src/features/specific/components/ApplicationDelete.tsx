@@ -11,18 +11,18 @@ interface Props {
 
 export const AnnouncementDeleteButton = ({ selectedId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenSecond, setIsOpenSecond] = useState(false);
+
+  const DeleteCompletion = () => {
+    setIsOpenSecond(false);
+    window.location.reload();
+  };
 
   const handleDelete = async () => {
-    if (!selectedId) {
-      alert("삭제할 지원서를 선택해주세요.");
-      return;
-    }
-
     try {
       await api.delete(`/v1/admin/applications/${selectedId}`);
-      window.location.reload();
-      alert("삭제되었습니다.");
       setIsOpen(false);
+      setIsOpenSecond(true);
     } catch (error) {
       console.error("삭제 실패:", error);
       alert("삭제 중 오류가 발생했습니다.");
@@ -34,7 +34,10 @@ export const AnnouncementDeleteButton = ({ selectedId }: Props) => {
       <div
         className="bg-admin-box flex h-9 w-28 cursor-pointer items-center justify-center rounded-[10px] text-sm font-medium text-white hover:opacity-70"
         onClick={() => {
-          setIsOpen(true);
+          if (!selectedId) {
+            alert("메모할 지원서를 선택해주세요.");
+            return;
+          } else setIsOpen(true);
         }}
       >
         지원서 삭제
@@ -56,6 +59,21 @@ export const AnnouncementDeleteButton = ({ selectedId }: Props) => {
 
             <div onClick={handleDelete} className="flex w-full">
               <Button>확인</Button>
+            </div>
+          </Modal.ButtonLayout>
+        </Modal>
+      )}
+
+      {isOpenSecond && (
+        <Modal>
+          <Modal.TextLayout>
+            <Modal.Title>지원서 삭제</Modal.Title>
+            <Modal.Description>{`요청한 사용자의 지원서를 삭제했어요`}</Modal.Description>
+          </Modal.TextLayout>
+
+          <Modal.ButtonLayout>
+            <div onClick={DeleteCompletion} className="flex w-full">
+              <Button>완료</Button>
             </div>
           </Modal.ButtonLayout>
         </Modal>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import CloseImg from "@shared/assets/cancel.png";
 import { api } from "@shared/apis";
+import Modal from "@shared/components/Modal";
+import Button from "@shared/components/Button";
 
 interface Props {
   selectedId: number | null;
@@ -9,6 +11,13 @@ interface Props {
 export const AnnouncementMemo = ({ selectedId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [memoSize, setMemoSize] = useState("");
+  const [isOpenSecond, setIsOpenSecond] = useState(false);
+
+  const RegistrationCompletion = () => {
+    setIsOpenSecond(false);
+
+    window.location.reload();
+  };
 
   const handleMemo = async () => {
     if (!selectedId) {
@@ -20,9 +29,8 @@ export const AnnouncementMemo = ({ selectedId }: Props) => {
       await api.post(`/v1/admin/applications/${selectedId}/memos`, {
         memo: memoSize,
       });
-      window.location.reload();
-      alert("메모가 등록되었습니다.");
       setIsOpen(false);
+      setIsOpenSecond(true);
     } catch (error) {
       console.error("삭제 실패:", error);
       alert("메모 작성 오류가 발생했습니다.");
@@ -30,8 +38,13 @@ export const AnnouncementMemo = ({ selectedId }: Props) => {
   };
 
   const openModal = () => {
-    document.body.style.overflow = "hidden";
-    setIsOpen(true);
+    if (!selectedId) {
+      alert("메모할 지원서를 선택해주세요.");
+      return;
+    } else {
+      document.body.style.overflow = "hidden";
+      setIsOpen(true);
+    }
   };
 
   const closeModal = () => {
@@ -112,6 +125,20 @@ export const AnnouncementMemo = ({ selectedId }: Props) => {
             </div>
           </div>
         </>
+      )}
+      {isOpenSecond && (
+        <Modal>
+          <Modal.TextLayout>
+            <Modal.Title>등록 완료</Modal.Title>
+            <Modal.Description>{`사용자에 대한 메모를 등록했어요`}</Modal.Description>
+          </Modal.TextLayout>
+
+          <Modal.ButtonLayout>
+            <div onClick={RegistrationCompletion} className="flex w-full">
+              <Button>완료</Button>
+            </div>
+          </Modal.ButtonLayout>
+        </Modal>
       )}
     </>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Vector2 from "@specific/assets/Vector2.png";
 import Modal from "@shared/components/Modal";
 import Button from "@shared/components/Button";
@@ -14,6 +14,32 @@ const AnnouncementReviewButton = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [reviewState, setReviewState] = useState("");
+  const [isOpenSecond, setIsOpenSecond] = useState(false);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const ChangeCompletion = () => {
+    setIsOpenSecond(false);
+
+    window.location.reload();
+  };
 
   const handleChangeReview = async () => {
     if (!selectedId) {
@@ -25,9 +51,7 @@ const AnnouncementReviewButton = ({
       await api.patch(`/v1/admin/applications/${selectedId}`, {
         evaluation: reviewState,
       });
-
-      alert("검토가 변경되었습니다.");
-      window.location.reload();
+      setIsOpenSecond(true);
       setIsOpen(false);
     } catch (error) {
       console.error("검토 변경 실패:", error);
@@ -36,7 +60,7 @@ const AnnouncementReviewButton = ({
   };
 
   return (
-    <div className="relative flex flex-col items-center">
+    <div ref={dropdownRef} className="relative flex flex-col items-center">
       <div
         onClick={() => setIsOpen((prev) => !prev)}
         className="bg-admin-box flex h-9 w-28 cursor-pointer items-center justify-center rounded-[10px] text-sm font-medium text-white hover:opacity-70"
@@ -58,8 +82,13 @@ const AnnouncementReviewButton = ({
           <div
             className="hover:text-admin-blue w-19.75 cursor-pointer"
             onClick={() => {
-              setIsOpenModal(true);
-              setReviewState("PASS");
+              if (!selectedId) {
+                alert("검토 변경할 지원서를 선택해주세요.");
+                return;
+              } else {
+                setIsOpenModal(true);
+                setReviewState("PASS");
+              }
             }}
           >
             PASS
@@ -67,17 +96,27 @@ const AnnouncementReviewButton = ({
           <div
             className="hover:text-admin-red w-19.75 cursor-pointer"
             onClick={() => {
-              setIsOpenModal(true);
-              setReviewState("FAIL");
+              if (!selectedId) {
+                alert("검토 변경할 지원서를 선택해주세요.");
+                return;
+              } else {
+                setIsOpenModal(true);
+                setReviewState("FAIL");
+              }
             }}
           >
             FAIL
           </div>
           <div
-            className="hover:text-admin-white w-19.75 cursor-pointer"
+            className="w-19.75 cursor-pointer hover:text-[#F8D90E]"
             onClick={() => {
-              setIsOpenModal(true);
-              setReviewState("HOLD");
+              if (!selectedId) {
+                alert("검토 변경할 지원서를 선택해주세요.");
+                return;
+              } else {
+                setIsOpenModal(true);
+                setReviewState("HOLD");
+              }
             }}
           >
             HOLD
@@ -103,6 +142,20 @@ const AnnouncementReviewButton = ({
 
             <div onClick={handleChangeReview} className="flex w-full">
               <Button>확인</Button>
+            </div>
+          </Modal.ButtonLayout>
+        </Modal>
+      )}
+      {isOpenSecond && (
+        <Modal>
+          <Modal.TextLayout>
+            <Modal.Title>변경 완료</Modal.Title>
+            <Modal.Description>{`사용자에 검토 변경를 등록했어요`}</Modal.Description>
+          </Modal.TextLayout>
+
+          <Modal.ButtonLayout>
+            <div onClick={ChangeCompletion} className="flex w-full">
+              <Button>완료</Button>
             </div>
           </Modal.ButtonLayout>
         </Modal>

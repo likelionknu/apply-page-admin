@@ -6,14 +6,28 @@ interface AnnouncementButtonProps {
   text: string;
   modalTitle: string;
   modalDescription: string;
+  onConfirm: () => void;
 }
 
 const AnnouncementButton = ({
   text,
   modalTitle,
   modalDescription,
+  onConfirm,
 }: AnnouncementButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenSecond, setIsOpenSecond] = useState(false);
+
+  const ShipmentCompletion = () => {
+    setIsOpenSecond(false);
+
+    window.location.reload();
+  };
+
+  const handleConfirm = () => {
+    onConfirm();
+    setIsOpenSecond(true);
+  };
 
   return (
     <>
@@ -36,13 +50,22 @@ const AnnouncementButton = ({
               <Button>취소</Button>
             </button>
 
-            <div
-              onClick={() => {
-                setIsOpen(false);
-              }}
-              className="flex w-full"
-            >
+            <div onClick={handleConfirm} className="flex w-full">
               <Button>확인</Button>
+            </div>
+          </Modal.ButtonLayout>
+        </Modal>
+      )}
+      {isOpenSecond && (
+        <Modal>
+          <Modal.TextLayout>
+            <Modal.Title>발송 완료</Modal.Title>
+            <Modal.Description>{`사용자에 대한 결과를 발송했어요`}</Modal.Description>
+          </Modal.TextLayout>
+
+          <Modal.ButtonLayout>
+            <div onClick={ShipmentCompletion} className="flex w-full">
+              <Button>완료</Button>
             </div>
           </Modal.ButtonLayout>
         </Modal>

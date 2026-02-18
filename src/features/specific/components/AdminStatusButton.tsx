@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Vector2 from "@specific/assets/Vector2.png";
 import Modal from "@shared/components/Modal";
 import Button from "@shared/components/Button";
@@ -12,6 +12,32 @@ const AdminStatusButton = ({ selectedId }: AdminStatusButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [statusOption, setStatusOption] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenSecond, setIsOpenSecond] = useState(false);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const ChangeCompletion = () => {
+    setIsOpenSecond(false);
+
+    window.location.reload();
+  };
 
   const STATUS_MAP: Record<string, string> = {
     임시저장: "DRAFT",
@@ -28,18 +54,12 @@ const AdminStatusButton = ({ selectedId }: AdminStatusButtonProps) => {
   };
 
   const handleChangeStatus = async () => {
-    if (!selectedId) {
-      alert("상태 변경할 지원서를 선택해주세요.");
-      return;
-    }
-
     try {
       await api.patch(`/v1/admin/applications/${selectedId}`, {
         status: statusOption,
       });
 
-      alert("상태 변경이 되었습니다.");
-      window.location.reload();
+      setIsOpenSecond(true);
       setIsOpen(false);
     } catch (error) {
       console.error("상태 변경 실패:", error);
@@ -48,7 +68,7 @@ const AdminStatusButton = ({ selectedId }: AdminStatusButtonProps) => {
   };
 
   return (
-    <div className="relative flex flex-col items-center">
+    <div ref={dropdownRef} className="relative flex flex-col items-center">
       {/* 🔽 상단 버튼 */}
       <div
         onClick={() => setIsOpen((prev) => !prev)}
@@ -74,9 +94,14 @@ const AdminStatusButton = ({ selectedId }: AdminStatusButtonProps) => {
               key={english}
               className="hover:text-admin-white flex w-full cursor-pointer items-center justify-center rounded-md py-2 transition-colors hover:bg-white/10"
               onClick={() => {
-                setStatusOption(english);
-                setIsOpenModal(true);
-                console.log("API로 보낼 값:", english);
+                if (!selectedId) {
+                  alert("상태 변경할 지원서를 선택해주세요.");
+                  return;
+                } else {
+                  setStatusOption(english);
+                  setIsOpenModal(true);
+                  console.log("API로 보낼 값:", english);
+                }
               }}
             >
               {korean}
@@ -103,6 +128,21 @@ const AdminStatusButton = ({ selectedId }: AdminStatusButtonProps) => {
 
             <div onClick={handleChangeStatus} className="flex w-full">
               <Button>확인</Button>
+            </div>
+          </Modal.ButtonLayout>
+        </Modal>
+      )}
+
+      {isOpenSecond && (
+        <Modal>
+          <Modal.TextLayout>
+            <Modal.Title>변경 완료</Modal.Title>
+            <Modal.Description>{`사용자에 상태 변경를 등록했어요`}</Modal.Description>
+          </Modal.TextLayout>
+
+          <Modal.ButtonLayout>
+            <div onClick={ChangeCompletion} className="flex w-full">
+              <Button>완료</Button>
             </div>
           </Modal.ButtonLayout>
         </Modal>

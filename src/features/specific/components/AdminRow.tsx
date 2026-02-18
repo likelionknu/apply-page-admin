@@ -27,6 +27,12 @@ export const AdminRow: React.FC<AdminRowProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const evaluationColorMap: Record<string, string> = {
+    PASS: "text-admin-blue",
+    FAIL: "text-admin-red",
+    HOLD: "text-[#F8D90E]",
+  };
+
   return (
     <div className="bg-admin-box flex h-12 w-298.5 items-center justify-center rounded-[10px]">
       <div className="flex w-284.5 items-center">
@@ -76,14 +82,10 @@ export const AdminRow: React.FC<AdminRowProps> = ({
 
         <div
           className={`ml-9.25 w-14 truncate text-center text-sm font-medium ${
-            evaluation === "PASS"
-              ? "text-admin-blue"
-              : evaluation === "FAIL"
-                ? "text-admin-red"
-                : "text-admin-disable"
+            evaluationColorMap[evaluation ?? ""] ?? "text-admin-disable"
           }`}
         >
-          {evaluation}
+          {evaluation ?? "미등록"}
         </div>
 
         <div className="ml-8.5 w-20 truncate text-center text-sm font-medium text-white">

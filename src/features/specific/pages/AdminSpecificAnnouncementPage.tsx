@@ -4,6 +4,7 @@ import { api } from "@shared/apis";
 import { useNavigate } from "react-router-dom";
 
 import UnCheckCircle from "../assets/UnCheckCircle.png";
+import CheckedCircle1 from "../assets/CheckedCircle1.png";
 import { AdminRow } from "@specific/components/AdminRow";
 import AnnouncementReviewButton from "@specific/components/AnnouncementReviewButton";
 import AdminStateButton from "@specific/components/AdminStatusButton";
@@ -16,6 +17,7 @@ import { AnnouncementMemo } from "@specific/components/AnnouncementMemo";
 
 const AdminSpecificAnnouncementPage = () => {
   const navigate = useNavigate();
+  const [isHidden, setIsHidden] = useState(false);
 
   // ----------------------------- 제목 부분 api -----------------------------
   interface Announcement {
@@ -96,6 +98,26 @@ const AdminSpecificAnnouncementPage = () => {
   };
 
   // ----------------------------- 특정 지원서 부분 api 끝 -----------------------------
+  // ----------------------------- 1차 결과 발표 부분 api  -----------------------------
+  const firstPassApi = async () => {
+    const res = await api.get("/v1/admin/recruits/2/notifications/document");
+    return res.data;
+  };
+  // ----------------------------- 1차 결과 발표 부분 api 끝  -----------------------------
+  // ----------------------------- 2차 결과 발표 부분 api  -------------------------------
+  const secondPassApi = async () => {
+    const res = await api.get("/v1/admin/recruits/2/notifications/final");
+    return res.data;
+  };
+  // ----------------------------- 2차 결과 발표 부분 api 끝  -----------------------------
+
+  const filteredUsers = isHidden
+    ? users.filter(
+        (user) =>
+          STATUS_KOR_MAP[user.status] !== "임시저장" &&
+          STATUS_KOR_MAP[user.status] !== "회수",
+      )
+    : users;
 
   return (
     <div className="flex justify-center bg-black">
@@ -148,8 +170,14 @@ const AdminSpecificAnnouncementPage = () => {
             지원서를 탭하면 자세히 볼 수 있어요
           </div>
           <div className="mt-3.5 flex h-9 w-full justify-between">
-            <div className="flex w-full items-center gap-2.5">
-              <img src={UnCheckCircle} className="h-3.5 w-3.5" />
+            <div
+              onClick={() => setIsHidden((prev) => !prev)}
+              className="flex w-full cursor-pointer items-center gap-2.5"
+            >
+              <img
+                src={isHidden ? CheckedCircle1 : UnCheckCircle}
+                className="h-3.5 w-3.5"
+              />
               <div className="justify-start text-sm font-medium text-white">
                 임시저장, 회수한 지원서 숨기기
               </div>
@@ -162,8 +190,8 @@ const AdminSpecificAnnouncementPage = () => {
               <AnnouncementButton
                 text="서류 결과 발송"
                 modalTitle="서류(1차) 결과 이메일 발송"
-                modalDescription="모든 지원서에 대한 서류 결과를 발송할까요? 
-              대상: 지원 상태가 서류 합격 또는 서류 불합격인 사용자"
+                modalDescription="모든 지원서에 대한 서류 결과를 발송할까요?"
+                onConfirm={firstPassApi}
               />
 
               <AnnouncementButton
@@ -171,6 +199,7 @@ const AdminSpecificAnnouncementPage = () => {
                 modalTitle="최종(2차) 결과 이메일 발송"
                 modalDescription="모든 지원서에 대한 최종 결과를 발송할까요? 
               대상: 지원 상태가 최종 불합격 또는 최종 합격인 사용자"
+                onConfirm={secondPassApi}
               />
             </div>
           </div>
@@ -200,7 +229,7 @@ const AdminSpecificAnnouncementPage = () => {
             </div>
           </div>
           <div className="mt-2.5 flex w-298.5 flex-col items-center gap-2.5">
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <AdminRow
                 key={user.application_id}
                 application_id={user.application_id}
