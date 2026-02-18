@@ -2,114 +2,26 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Button, Footer, Header, Modal } from "@shared/components";
+import { editRecruit, getRecruit } from "@announce/apis";
 import WarningMessage from "../components/WarningMessage";
 import RecruitInfoSection from "../components/RecruitInfoSection";
 import RecruitQuestionSection from "../components/RecruitQuestionSection";
-import { editRecruit, getRecruit } from "@announce/apis";
-import type { Recruit } from "../types/RecruitQuestion";
+import { useRecruitForm } from "../hooks/useRecruitForm";
 
 function AdminAnnouncementEditPage() {
   const { recruitId } = useParams<{ recruitId: string }>();
-
-  const [recruitInfo, setRecruitInfo] = useState<Recruit>({
-    title: "",
-    start_at: "",
-    end_at: "",
-    questions: [],
-  });
+  const {
+    recruitInfo,
+    setRecruitInfo,
+    handleAddQuestion,
+    handleDeleteQuestion,
+    handleTitleChange,
+    handleDateChange,
+    handleQuestionChange,
+    handlePriorityChange,
+  } = useRecruitForm();
   const [activeModal, setActiveModal] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-
-  // 질문 추가
-  const handleAddQuestion = () => {
-    setRecruitInfo((prev) => {
-      const nextPriority = prev.questions.length + 1;
-
-      return {
-        ...prev,
-        questions: [
-          ...prev.questions,
-          {
-            priority: nextPriority,
-            question: "",
-          },
-        ],
-      };
-    });
-  };
-
-  // 질문 삭제
-  const handleDeleteQuestion = (targetIndex: number) => {
-    setRecruitInfo((prev) => {
-      const filterdQuestions = prev.questions.filter(
-        (_, index) => index !== targetIndex,
-      );
-
-      const newQuestions = filterdQuestions.map((item, index) => ({
-        ...item,
-        priority: index + 1,
-      }));
-
-      return {
-        ...prev,
-        questions: newQuestions,
-      };
-    });
-  };
-
-  // 제목 변경
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRecruitInfo((prev) => ({ ...prev, title: e.target.value }));
-  };
-
-  // 날짜 변경
-  const handleDateChange = (key: "start_at" | "end_at", value: string) => {
-    if (!value) return;
-
-    const dateObj = new Date(value);
-    setRecruitInfo((prev) => ({ ...prev, [key]: dateObj.toISOString() }));
-  };
-
-  // 질문 내용 변경
-  const handleQuestionChange = (index: number, value: string) => {
-    setRecruitInfo((prev) => {
-      const newQuestions = [...prev.questions];
-      newQuestions[index] = { ...newQuestions[index], question: value };
-      return { ...prev, questions: newQuestions };
-    });
-  };
-
-  // 우선순위 변경 및 정렬
-  const handlePriorityChange = (
-    currentPriority: number,
-    newPriority: number,
-  ) => {
-    if (currentPriority === newPriority) return;
-
-    setRecruitInfo((prev) => {
-      const questions = [...prev.questions];
-
-      const targetIndex = questions.findIndex(
-        (q) => q.priority === currentPriority,
-      );
-      const swapIndex = questions.findIndex((q) => q.priority === newPriority);
-
-      if (targetIndex === -1 || swapIndex === -1) return prev;
-
-      questions[targetIndex] = {
-        ...questions[targetIndex],
-        priority: newPriority,
-      };
-      questions[swapIndex] = {
-        ...questions[swapIndex],
-        priority: currentPriority,
-      };
-
-      questions.sort((a, b) => a.priority - b.priority);
-
-      return { ...prev, questions };
-    });
-  };
 
   const handleEdit = async () => {
     let msg = "";
@@ -119,12 +31,10 @@ function AdminAnnouncementEditPage() {
     if (!recruitId || isNaN(id) || id <= 0) return;
 
     try {
-      const payload = {
+      const { data } = await editRecruit({
         recruitId: id,
         payload: recruitInfo,
-      };
-
-      const { data } = await editRecruit(payload);
+      });
 
       const apiError = data?.error;
 
@@ -153,6 +63,7 @@ function AdminAnnouncementEditPage() {
   };
 
   useEffect(() => {
+    let msg = "";
     const id = Number(recruitId);
 
     if (!recruitId || isNaN(id) || id <= 0) return;
@@ -192,7 +103,7 @@ function AdminAnnouncementEditPage() {
           questions: mappedQuestions,
         });
       } catch (error) {
-        let msg = "서버와 연결할 수 없습니다.";
+        msg = "서버와 연결할 수 없습니다.";
 
         if (axios.isAxiosError(error)) {
           if (error.response?.data?.error?.message) {
@@ -203,13 +114,14 @@ function AdminAnnouncementEditPage() {
         } else if (error instanceof Error) {
           msg = error.message;
         }
-
-        console.log(msg);
+      } finally {
+        setMessage(msg);
+        setActiveModal(true);
       }
     };
 
     fetchRecruit();
-  }, [recruitId]);
+  }, [recruitId, setRecruitInfo]);
 
   return (
     <div className="flex w-full flex-col bg-black text-white">
@@ -235,7 +147,6 @@ function AdminAnnouncementEditPage() {
 
           <WarningMessage />
 
-          {/* 공고 명, 시작 일 종료 일 */}
           <RecruitInfoSection
             title={recruitInfo.title}
             startAt={recruitInfo.start_at}
@@ -244,7 +155,6 @@ function AdminAnnouncementEditPage() {
             onDateChange={handleDateChange}
           />
 
-          {/* 공고 질문들 */}
           <RecruitQuestionSection
             questions={recruitInfo.questions}
             onAdd={handleAddQuestion}
@@ -269,4 +179,5 @@ function AdminAnnouncementEditPage() {
     </div>
   );
 }
+
 export default AdminAnnouncementEditPage;

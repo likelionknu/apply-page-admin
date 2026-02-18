@@ -1,126 +1,35 @@
 import { useState } from "react";
+import axios from "axios";
 import { Button, Footer, Header, Modal } from "@shared/components";
+import { createRecruit } from "@announce/apis";
 import RecruitInfoSection from "../components/RecruitInfoSection";
 import RecruitQuestionSection from "../components/RecruitQuestionSection";
-import type { Recruit } from "../types/RecruitQuestion";
-import { createRecruit } from "@announce/apis";
-import axios from "axios";
+import { useRecruitForm } from "../hooks/useRecruitForm";
 
 function AdminAnnouncementCreatePage() {
-  const [recruitInfo, setRecruitInfo] = useState<Recruit>({
-    title: "",
-    start_at: "",
-    end_at: "",
-    questions: [],
-  });
+  const {
+    recruitInfo,
+    handleAddQuestion,
+    handleDeleteQuestion,
+    handleTitleChange,
+    handleDateChange,
+    handleQuestionChange,
+    handlePriorityChange,
+  } = useRecruitForm();
   const [activeModal, setActiveModal] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-
-  // 질문 추가
-  const handleAddQuestion = () => {
-    setRecruitInfo((prev) => {
-      const nextPriority = prev.questions.length + 1;
-
-      return {
-        ...prev,
-        questions: [
-          ...prev.questions,
-          {
-            priority: nextPriority,
-            question: "",
-          },
-        ],
-      };
-    });
-  };
-
-  // 질문 삭제
-  const handleDeleteQuestion = (targetIndex: number) => {
-    setRecruitInfo((prev) => {
-      const filterdQuestions = prev.questions.filter(
-        (_, index) => index !== targetIndex,
-      );
-
-      const newQuestions = filterdQuestions.map((item, index) => ({
-        ...item,
-        priority: index + 1,
-      }));
-
-      return {
-        ...prev,
-        questions: newQuestions,
-      };
-    });
-  };
-
-  // 제목 변경
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRecruitInfo((prev) => ({ ...prev, title: e.target.value }));
-  };
-
-  // 날짜 변경
-  const handleDateChange = (key: "start_at" | "end_at", value: string) => {
-    if (!value) return;
-
-    const dateObj = new Date(value);
-    setRecruitInfo((prev) => ({ ...prev, [key]: dateObj.toISOString() }));
-  };
-
-  // 질문 내용 변경
-  const handleQuestionChange = (index: number, value: string) => {
-    setRecruitInfo((prev) => {
-      const newQuestions = [...prev.questions];
-      newQuestions[index] = { ...newQuestions[index], question: value };
-      return { ...prev, questions: newQuestions };
-    });
-  };
-
-  // 우선순위 변경 및 정렬
-  const handlePriorityChange = (
-    currentPriority: number,
-    newPriority: number,
-  ) => {
-    if (currentPriority === newPriority) return;
-
-    setRecruitInfo((prev) => {
-      const questions = [...prev.questions];
-
-      const targetIndex = questions.findIndex(
-        (q) => q.priority === currentPriority,
-      );
-      const swapIndex = questions.findIndex((q) => q.priority === newPriority);
-
-      if (targetIndex === -1 || swapIndex === -1) return prev;
-
-      questions[targetIndex] = {
-        ...questions[targetIndex],
-        priority: newPriority,
-      };
-      questions[swapIndex] = {
-        ...questions[swapIndex],
-        priority: currentPriority,
-      };
-
-      questions.sort((a, b) => a.priority - b.priority);
-
-      return { ...prev, questions };
-    });
-  };
 
   const handleAdd = async () => {
     let msg = "";
 
     try {
-      const payload = recruitInfo;
+      const { data } = await createRecruit(recruitInfo);
+      const apiError = data?.error;
 
-      const { data } = await createRecruit(payload);
-
-      const apiError = data.error;
-
-      if (apiError.code === null) {
-        msg = `모집 공고를 성공적으로 등록했어요. \n
-              모집 시작일이 도래하면 자동으로 공고가 공개돼요.`;
-      }
+      msg =
+        apiError?.code === null
+          ? `모집 공고를 성공적으로 등록했어요.\n모집 시작일이 미래라면 자동으로 공고가 공개돼요.`
+          : `요청한 공고를 등록할 수 없어요.\n입력한 내용을 다시 확인해주세요.`;
     } catch (error) {
       msg = "서버와 연결할 수 없습니다.";
 
@@ -165,7 +74,6 @@ function AdminAnnouncementCreatePage() {
             모집 공고 등록
           </div>
 
-          {/* 공고 명, 시작 일 종료 일 */}
           <RecruitInfoSection
             title={recruitInfo.title}
             startAt={recruitInfo.start_at}
@@ -174,7 +82,6 @@ function AdminAnnouncementCreatePage() {
             onDateChange={handleDateChange}
           />
 
-          {/* 공고 질문들 */}
           <RecruitQuestionSection
             questions={recruitInfo.questions}
             onAdd={handleAddQuestion}
@@ -199,4 +106,5 @@ function AdminAnnouncementCreatePage() {
     </div>
   );
 }
+
 export default AdminAnnouncementCreatePage;
