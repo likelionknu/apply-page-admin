@@ -1,9 +1,15 @@
 import Modal from "@shared/components/Modal";
 import Button from "@shared/components/Button";
+import { api } from "@shared/apis";
 
 import { useState } from "react";
 
 export const AnnouncementDelete = () => {
+  const deleteAnnouncement = async () => {
+    const res = await api.delete("/v1/admin/recruits/2");
+    return res.data;
+  };
+
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -31,8 +37,15 @@ export const AnnouncementDelete = () => {
             </button>
 
             <div
-              onClick={() => {
-                setIsOpen(false);
+              onClick={async () => {
+                try {
+                  await deleteAnnouncement();
+                  setIsOpen(false);
+                  alert("공고가 삭제되었습니다.");
+                } catch (error) {
+                  console.error("삭제 실패:", error);
+                  alert("삭제에 실패했습니다.");
+                }
               }}
               className="flex w-full"
             >
