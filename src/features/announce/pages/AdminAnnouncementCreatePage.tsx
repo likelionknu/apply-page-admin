@@ -14,6 +14,7 @@ function AdminAnnouncementCreatePage() {
     questions: [],
   });
   const [activeModal, setActiveModal] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   // 질문 추가
   const handleAddQuestion = () => {
@@ -107,6 +108,8 @@ function AdminAnnouncementCreatePage() {
   };
 
   const handleAdd = async () => {
+    let msg = "";
+
     try {
       const payload = recruitInfo;
 
@@ -115,10 +118,11 @@ function AdminAnnouncementCreatePage() {
       const apiError = data.error;
 
       if (apiError.code === null) {
-        setActiveModal(true);
+        msg = `모집 공고를 성공적으로 등록했어요. \n
+              모집 시작일이 도래하면 자동으로 공고가 공개돼요.`;
       }
     } catch (error) {
-      let msg = "서버와 연결할 수 없습니다.";
+      msg = "서버와 연결할 수 없습니다.";
 
       if (axios.isAxiosError(error)) {
         if (error.response?.data?.error?.message) {
@@ -129,8 +133,9 @@ function AdminAnnouncementCreatePage() {
       } else if (error instanceof Error) {
         msg = error.message;
       }
-
-      console.log(msg);
+    } finally {
+      setMessage(msg);
+      setActiveModal(true);
     }
   };
 
@@ -146,10 +151,7 @@ function AdminAnnouncementCreatePage() {
         <Modal>
           <Modal.TextLayout>
             <Modal.Title onClick={handleClose}>모집 공고 등록</Modal.Title>
-            <Modal.Description>
-              모집 공고를 성공적으로 등록했어요. {"\n"}
-              모집 시작일이 도래하면 자동으로 공고가 공개돼요.
-            </Modal.Description>
+            <Modal.Description>{message}</Modal.Description>
           </Modal.TextLayout>
           <Modal.ButtonLayout>
             <Button onClick={handleClose}>완료</Button>

@@ -112,6 +112,8 @@ function AdminAnnouncementEditPage() {
   };
 
   const handleEdit = async () => {
+    let msg = "";
+
     const id = Number(recruitId);
 
     if (!recruitId || isNaN(id) || id <= 0) return;
@@ -124,30 +126,24 @@ function AdminAnnouncementEditPage() {
 
       const { data } = await editRecruit(payload);
 
-      const apiError = data.error;
+      const apiError = data?.error;
 
-      if (apiError.code === null) {
-        setMessage(
-          `모집 공고를 성공적으로 수정했어요.\n수정한 공고는 즉시 사용자에게 공개돼요.`,
-        );
-      } else {
-        setMessage(
-          `요청한 공고를 수정할 수 없어요.\n공고에 지원한 사용자가 있는지 다시 확인해주세요.`,
-        );
-      }
+      msg =
+        apiError?.code === null
+          ? `모집 공고를 성공적으로 수정했어요.\n수정한 공고는 즉시 사용자에게 공개돼요.`
+          : `요청한 공고를 수정할 수 없어요.\n공고에 지원한 사용자가 있는지 다시 확인해주세요.`;
     } catch (error) {
-      let errorMsg = "알 수 없는 오류가 발생했습니다.";
+      msg = "서버와 연결할 수 없습니다.";
 
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          errorMsg = `서버에 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.`;
+          msg = `서버에 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.`;
         } else if (error.request) {
-          errorMsg = `서버와 연결할 수 없습니다.\n네트워크 상태를 확인해주세요.`;
+          msg = `서버와 연결할 수 없습니다.\n네트워크 상태를 확인해주세요.`;
         }
       }
-
-      setMessage(errorMsg);
     } finally {
+      setMessage(msg);
       setActiveModal(true);
     }
   };
