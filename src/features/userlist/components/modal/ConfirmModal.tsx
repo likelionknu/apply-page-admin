@@ -29,7 +29,6 @@ export default function ConfirmModal({
 
         <Modal.ButtonLayout>
           {onCancel && <Button onClick={onCancel}>{cancelText}</Button>}
-
           <Button onClick={onConfirm}>{confirmText}</Button>
         </Modal.ButtonLayout>
       </Modal>
