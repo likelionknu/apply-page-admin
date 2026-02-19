@@ -6,9 +6,9 @@ import type {
 type CardVariant = "web" | "mobile";
 
 const ANNOUNCEMENT_CARD_CLASS: Record<CardVariant, string> = {
-  web: "cursor-pointer flex h-41.25 w-94.5 flex-col rounded-2xl border border-admin-outline/10 bg-admin-outline/10 px-7 py-6 shadow-xl",
+  web: "cursor-pointer flex h-41.25 w-94.5 flex-col rounded-2xl bg-admin-box px-7 py-6 shadow-xl",
   mobile:
-    "cursor-pointer flex h-37.75 w-87.5 items-center justify-center rounded-2xl border border-admin-outline/10 bg-admin-box shadow-xl",
+    "cursor-pointer flex h-37.75 w-87.5 items-center justify-center rounded-2xl bg-admin-box shadow-xl",
 };
 
 const STATUS_TEXT_CLASS: Record<AnnouncementStatus, string> = {

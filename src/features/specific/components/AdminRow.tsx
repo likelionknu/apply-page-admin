@@ -10,6 +10,7 @@ interface AdminRowProps {
   submitted_at: string;
   evaluation: string;
   status: string;
+  onRowClick?: () => void;
 }
 
 export const AdminRow: React.FC<AdminRowProps> = ({
@@ -20,20 +21,24 @@ export const AdminRow: React.FC<AdminRowProps> = ({
   submitted_at,
   evaluation,
   status,
+  onRowClick,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
 
-  const handleClick = () => {
-    setIsChecked((prev) => !prev);
-  };
   return (
-    <div className="bg-admin-box flex h-12 w-298.5 items-center justify-center rounded-[10px]">
+    <div
+      onClick={onRowClick}
+      className="bg-admin-box hover:bg-admin-outline-2 flex h-12 w-298.5 cursor-pointer items-center justify-center rounded-[10px] transition"
+    >
       <div className="flex w-284.5 items-center">
         <img
           src={isChecked ? CheckedCircle1 : UnCheckCircle1}
           alt="circle"
           className="h-4.75 w-4.75 cursor-pointer"
-          onClick={handleClick}
+          onClick={(event) => {
+            event.stopPropagation();
+            setIsChecked((prev) => !prev);
+          }}
         />
 
         <div className="ml-8.25 w-12 truncate text-center text-sm font-medium text-white">
