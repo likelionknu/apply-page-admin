@@ -2,13 +2,13 @@ import { useState } from "react";
 import Header from "../../../shared/components/Header";
 
 import UnCheckCircle from "../assets/UnCheckCircle.png";
+import CheckedCircle1 from "../assets/CheckedCircle1.png";
 import { AdminRow } from "@specific/components/AdminRow";
 import AnnouncementTitleText from "@specific/components/AnnouncementTitleText";
 import ApplicationTableHeader from "@specific/components/ApplicationTableHeader";
 import AnnouncementReviewButton from "@specific/components/AnnouncementReviewButton";
 import AdminStateButton from "@specific/components/AdminStatusButton";
 import AnnouncementButton from "@specific/components/AnnouncementCardButton";
-import AnnouncementDateText from "@specific/components/AnnouncementDateText";
 import { AnnouncementDelete } from "@specific/components/AnnouncementDelete";
 import { AnnouncementQuestion } from "@specific/components/AnnouncementQuestion";
 import SpecificDetailModal from "@specific/components/modal/SpecificDetailmodal";

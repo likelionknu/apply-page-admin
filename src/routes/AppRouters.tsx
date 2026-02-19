@@ -73,7 +73,7 @@ function AppRouter() {
           element={<AdminAnnouncementEditPage />}
         />
         <Route
-          path="/admin/announcements/specific"
+          path="/admin/announcements/specific/:id"
           element={<AdminSpecificAnnouncementPage />}
         />
 
