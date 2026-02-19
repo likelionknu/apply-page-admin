@@ -8,7 +8,7 @@ const GoogleCallback = () => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     if (!code) {
-      navigate("/");
+      navigate("/login");
       return;
     }
 
@@ -38,7 +38,7 @@ const GoogleCallback = () => {
       .catch((err) => {
         console.error("Login error:", err);
         sessionStorage.clear();
-        navigate("/"); // 로그인 페이지로 돌아가기
+        navigate("/login"); // 로그인 페이지로 돌아가기
       });
   }, [navigate]);
 
