@@ -118,6 +118,7 @@ function AdminAnnouncementManagementPage() {
                 <button
                   type="button"
                   className={MOBILE_NEW_ANNOUNCEMENT_BUTTON_CLASS}
+                  onClick={() => navigate("/admin/announcements/create")}
                 >
                   새 공고 등록
                 </button>
@@ -198,6 +199,7 @@ function AdminAnnouncementManagementPage() {
                   <button
                     type="button"
                     className={WEB_NEW_ANNOUNCEMENT_BUTTON_CLASS}
+                    onClick={() => navigate("/admin/announcements/create")}
                   >
                     새 공고 등록
                   </button>
