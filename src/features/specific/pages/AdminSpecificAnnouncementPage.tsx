@@ -14,11 +14,15 @@ import { AnnouncementQuestion } from "@specific/components/AnnouncementQuestion"
 import { formatDate } from "@specific/components/TimeChange";
 import { AnnouncementDeleteButton } from "@specific/components/ApplicationDelete";
 import { AnnouncementMemo } from "@specific/components/AnnouncementMemo";
+import SpecificDetailModal from "@specific/components/modal/SpecificDetailmodal";
 
 const AdminSpecificAnnouncementPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isHidden, setIsHidden] = useState(false);
+  const [detailApplicationId, setDetailApplicationId] = useState<number | null>(
+    null,
+  );
 
   // ----------------------------- 제목 부분 api -----------------------------
   interface Announcement {
@@ -35,22 +39,17 @@ const AdminSpecificAnnouncementPage = () => {
     questions: [],
   });
 
-  const getAnnouncementInfo = async () => {
-    const res = await api.get(`/v1/admin/recruits/${id}`);
-    return res.data;
-  };
-
   useEffect(() => {
     const specificAnnouncementInfoApi = async () => {
       try {
-        const data = await getAnnouncementInfo();
-        setAnnouncement(data.data);
+        const res = await api.get(`/v1/admin/recruits/${id}`);
+        setAnnouncement(res.data.data);
       } catch (error) {
         console.error("에러:", error);
       }
     };
     specificAnnouncementInfoApi();
-  }, []);
+  }, [id]);
   // ----------------------------- 제목 부분 api 끝 -----------------------------
   // ----------------------------- 작성자 정보 부분 api -----------------------------
 
@@ -87,7 +86,7 @@ const AdminSpecificAnnouncementPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
 
   // ----------------------------- 작성자 정보 부분 api 끝 -----------------------------
   // ----------------------------- 특정 지원서 부분 api -----------------------------
@@ -244,11 +243,19 @@ const AdminSpecificAnnouncementPage = () => {
                 status={STATUS_KOR_MAP[user.status] ?? user.status}
                 isSelected={selectedId === user.application_id}
                 onSelect={handleSelect}
+                onRowClick={() => setDetailApplicationId(user.application_id)}
               />
             ))}
           </div>
         </div>
       </div>
+
+      {detailApplicationId !== null && (
+        <SpecificDetailModal
+          currentApplicationId={detailApplicationId}
+          onClose={() => setDetailApplicationId(null)}
+        />
+      )}
     </div>
   );
 };
