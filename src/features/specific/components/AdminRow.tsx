@@ -12,7 +12,6 @@ interface AdminRowProps {
   status: string;
   isSelected: boolean;
   onSelect: (id: number) => void;
-
 }
 
 export const AdminRow: React.FC<AdminRowProps> = ({
@@ -25,24 +24,23 @@ export const AdminRow: React.FC<AdminRowProps> = ({
   status,
   isSelected,
   onSelect,
-
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const evaluationColorMap: Record<string, string> = {
+    PASS: "text-admin-blue",
+    FAIL: "text-admin-red",
+    HOLD: "text-[#F8D90E]",
+  };
+
   return (
-    <div
-      onClick={onRowClick}
-      className="bg-admin-box hover:bg-admin-outline-2 flex h-12 w-298.5 cursor-pointer items-center justify-center rounded-[10px] transition"
-    >
+    <div className="bg-admin-box flex h-12 w-298.5 items-center justify-center rounded-[10px]">
       <div className="flex w-284.5 items-center">
         <img
           src={isSelected ? CheckedCircle1 : UnCheckCircle1}
           alt="circle"
           className="h-4.75 w-4.75 cursor-pointer"
-          onClick={(event) => {
-            event.stopPropagation();
-            setIsChecked((prev) => !prev);
-          }}
+          onClick={() => onSelect(application_id)}
         />
 
         <div className="ml-8.25 w-12 truncate text-center text-sm font-medium text-white">
