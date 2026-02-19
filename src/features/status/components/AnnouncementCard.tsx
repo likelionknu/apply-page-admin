@@ -21,11 +21,13 @@ const STATUS_TEXT_CLASS: Record<AnnouncementStatus, string> = {
 interface AnnouncementCardProps {
   announcement: Announcement;
   variant?: CardVariant;
+  onClick?: () => void;
 }
 
 function AnnouncementCard({
   announcement,
   variant = "web",
+  onClick,
 }: AnnouncementCardProps) {
   const navigate = useNavigate();
   const isMobile = variant === "mobile";
@@ -46,7 +48,9 @@ function AnnouncementCard({
   };
 
   return (
-    <article className={ANNOUNCEMENT_CARD_CLASS[variant]} onClick={handleClick}>
+
+    <article className={ANNOUNCEMENT_CARD_CLASS[variant]} onClick={onClick}>
+
       <div className={contentWrapperClass}>
         {/* 공고 상태 라벨 (예정/모집 중/완료) */}
         <div

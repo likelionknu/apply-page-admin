@@ -12,6 +12,7 @@ interface AdminRowProps {
   status: string;
   isSelected: boolean;
   onSelect: (id: number) => void;
+  onRowClick?: () => void;
 }
 
 export const AdminRow: React.FC<AdminRowProps> = ({
@@ -24,6 +25,7 @@ export const AdminRow: React.FC<AdminRowProps> = ({
   status,
   isSelected,
   onSelect,
+  onRowClick,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -34,13 +36,19 @@ export const AdminRow: React.FC<AdminRowProps> = ({
   };
 
   return (
-    <div className="bg-admin-box flex h-12 w-298.5 items-center justify-center rounded-[10px]">
+    <div
+      className="bg-admin-box hover:bg-admin-outline-2 flex h-12 w-298.5 cursor-pointer items-center justify-center rounded-[10px] transition"
+      onClick={onRowClick}
+    >
       <div className="flex w-284.5 items-center">
         <img
           src={isSelected ? CheckedCircle1 : UnCheckCircle1}
           alt="circle"
           className="h-4.75 w-4.75 cursor-pointer"
-          onClick={() => onSelect(application_id)}
+          onClick={(event) => {
+            event.stopPropagation();
+            onSelect(application_id);
+          }}
         />
 
         <div className="ml-8.25 w-12 truncate text-center text-sm font-medium text-white">
@@ -57,7 +65,12 @@ export const AdminRow: React.FC<AdminRowProps> = ({
 
         <div className="relative ml-10 w-56 text-center text-sm font-medium">
           <div
-            onClick={() => memo && setIsOpen(!isOpen)}
+            onClick={(event) => {
+              event.stopPropagation();
+              if (memo) {
+                setIsOpen(!isOpen);
+              }
+            }}
             className={`cursor-pointer truncate ${
               !memo ? "text-admin-disable" : "text-white"
             }`}

@@ -10,6 +10,7 @@ import logoImg from "@shared/assets/logo.png";
 import Footer from "@shared/components/Footer";
 import Header from "@shared/components/Header";
 import { getRecruitAnnouncements } from "../apis/recruits";
+import { useNavigate } from "react-router-dom";
 
 const FILTER_OPTIONS: FilterOption[] = [
   { value: "전체", label: "전체" },
@@ -28,6 +29,7 @@ const MOBILE_FOOTER_DESCRIPTION = `실습실 : 경기도 용인시 기흥구 강
 프로젝트 개발 : 프로젝트 코어`;
 
 function AdminAnnouncementManagementPage() {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState<Filter>("전체");
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -144,15 +146,18 @@ function AdminAnnouncementManagementPage() {
                   )}
                 {!isLoading &&
                   !errorMessage &&
-                  filteredAnnouncements
-                    .slice(0, 9)
-                    .map((announcement) => (
-                      <AnnouncementCard
-                        key={announcement.id}
-                        announcement={announcement}
-                        variant="mobile"
-                      />
-                    ))}
+
+                  filteredAnnouncements.slice(0, 9).map((announcement) => (
+                    <AnnouncementCard
+                      key={announcement.id}
+                      announcement={announcement}
+                      variant="mobile"
+                      onClick={() =>
+                        navigate(`/admin/announcements/specific/${announcement.id}`)
+                      }
+                    />
+                  ))}
+
               </section>
             </div>
           </div>
@@ -226,6 +231,11 @@ function AdminAnnouncementManagementPage() {
                       <AnnouncementCard
                         key={announcement.id}
                         announcement={announcement}
+                        onClick={() =>
+                          navigate(
+                            `/admin/announcements/specific/${announcement.id}`,
+                          )
+                        }
                       />
                     ))}
                   </div>
