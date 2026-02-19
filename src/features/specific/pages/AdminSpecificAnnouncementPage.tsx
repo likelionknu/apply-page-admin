@@ -111,9 +111,9 @@ const AdminSpecificAnnouncementPage = () => {
         </div>
       </div>
 
+      {/*api*/}
       {detailApplicationId !== null && (
         <SpecificDetailModal
-          applications={APPLICATIONS}
           currentApplicationId={detailApplicationId}
           onClose={() => setDetailApplicationId(null)}
         />

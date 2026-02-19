@@ -1,8 +1,10 @@
+import { useEffect, useMemo, useState } from "react";
 import Button from "@shared/components/Button";
 import Modal from "@shared/components/Modal";
 import closeIcon from "@shared/assets/cancel.png";
 import { SpecificDetailField } from "./SpecificDetailField";
 import { SpecificQuestionCard } from "./SpecificQuestionCard";
+import { getApplicationDetail } from "@specific/apis/applicationDetail";
 
 export interface SpecificApplication {
   application_id: number;
@@ -23,37 +25,77 @@ export interface SpecificApplication {
 }
 
 interface Props {
-  applications: SpecificApplication[];
   currentApplicationId: number;
   onClose: () => void;
 }
 
 export default function SpecificDetailModal({
-  applications,
   currentApplicationId,
   onClose,
 }: Props) {
-  const currentApplication =
-    applications.find(
-      (application) => application.application_id === currentApplicationId,
-    ) ?? null;
+  /*api*/
+  const [currentApplication, setCurrentApplication] =
+    useState<SpecificApplication | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  if (!currentApplication) {
-    return null;
-  }
+  /*api*/
+  useEffect(() => {
+    let mounted = true;
 
-  const questions = currentApplication.questions ?? [];
-  const submissionStatus = currentApplication.submissionStatus ?? "최종제출";
-  const detailFields = [
-    { label: "이름", value: currentApplication.name },
-    { label: "이메일 주소", value: currentApplication.email ?? "미등록" },
-    { label: "학적 상태", value: currentApplication.academicStatus ?? "미등록" },
-    { label: "전화번호", value: currentApplication.phone ?? "미등록" },
-    { label: "학년", value: currentApplication.grade ?? "미등록" },
-    { label: "학부", value: currentApplication.department ?? "미등록" },
-    { label: "학번", value: currentApplication.studentId ?? "미등록" },
-    { label: "최종 제출일", value: currentApplication.finalSubmittedAt ?? "미등록" },
-  ];
+    const fetchApplicationDetail = async () => {
+      setIsLoading(true);
+      setErrorMessage(null);
+      setCurrentApplication(null);
+
+      try {
+        const detail = await getApplicationDetail(currentApplicationId);
+        if (mounted) {
+          setCurrentApplication(detail);
+        }
+      } catch (error) {
+        if (mounted) {
+          setErrorMessage(
+            error instanceof Error
+              ? error.message
+              : "지원서 상세 정보를 불러오지 못했어요.",
+          );
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchApplicationDetail();
+
+    return () => {
+      mounted = false;
+    };
+  }, [currentApplicationId]);
+
+  const questions = currentApplication?.questions ?? [];
+  const submissionStatus = currentApplication?.submissionStatus;
+  const detailFields = useMemo(
+    () => [
+      { label: "이름", value: currentApplication?.name ?? "미등록" },
+      { label: "이메일 주소", value: currentApplication?.email ?? "미등록" },
+      {
+        label: "학적 상태",
+        value: currentApplication?.academicStatus ?? "미등록",
+      },
+      { label: "전화번호", value: currentApplication?.phone ?? "미등록" },
+      { label: "학년", value: currentApplication?.grade ?? "미등록" },
+      { label: "학부", value: currentApplication?.department ?? "미등록" },
+      { label: "학번", value: currentApplication?.studentId ?? "미등록" },
+      {
+        label: "최종 제출일",
+        value: currentApplication?.finalSubmittedAt ?? "미등록",
+      },
+    ],
+    [currentApplication],
+  );
 
   return (
     <div
@@ -68,9 +110,11 @@ export default function SpecificDetailModal({
             <Modal.Title onClick={onClose}>
               <div>
                 지원서 상세 보기
-                <span className="text-admin-sub ml-6 text-sm font-medium">
-                  {submissionStatus}
-                </span>
+                {submissionStatus && (
+                  <span className="text-admin-sub ml-6 text-sm font-medium">
+                    {submissionStatus}
+                  </span>
+                )}
               </div>
             </Modal.Title>
           </Modal.TextLayout>
@@ -80,28 +124,49 @@ export default function SpecificDetailModal({
             className="overflow-y-scroll px-5 pt-6"
             style={{ maxHeight: "calc(100vh - 320px)" }}
           >
-            {/* 지원자 기본 정보 */}
-            <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-              {detailFields.map((field) => (
-                <SpecificDetailField
-                  key={field.label}
-                  label={field.label}
-                  value={field.value}
-                />
-              ))}
-            </div>
+            {/*api*/}
+            {isLoading && (
+              <p className="text-admin-sub py-16 text-center text-sm font-medium">
+                지원서 상세 정보를 불러오는 중이에요.
+              </p>
+            )}
+            {/*api*/}
+            {!isLoading && errorMessage && (
+              <p className="text-admin-red py-16 text-center text-sm font-medium">
+                {errorMessage}
+              </p>
+            )}
+            {!isLoading && !errorMessage && currentApplication && (
+              <>
+                {/* 지원자 기본 정보 */}
+                <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                  {detailFields.map((field) => (
+                    <SpecificDetailField
+                      key={field.label}
+                      label={field.label}
+                      value={field.value}
+                    />
+                  ))}
+                </div>
 
-            {/* 질문/답변 카드 목록 */}
-            <div className="mt-8 space-y-7">
-              {questions.map((item, index) => (
-                <SpecificQuestionCard
-                  key={`${item.question}-${index}`}
-                  question={item.question}
-                  answer={item.answer}
-                  submittedCount={item.submittedCount}
-                />
-              ))}
-            </div>
+                {/* 질문/답변 카드 목록 */}
+                <div className="mt-8 space-y-7">
+                  {questions.length === 0 && (
+                    <p className="text-admin-sub text-left text-sm font-medium">
+                      등록된 답변이 없어요.
+                    </p>
+                  )}
+                  {questions.map((item, index) => (
+                    <SpecificQuestionCard
+                      key={`${item.question}-${index}`}
+                      question={item.question}
+                      answer={item.answer}
+                      submittedCount={item.submittedCount}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           {/* 하단 완료 버튼 */}
@@ -132,38 +197,60 @@ export default function SpecificDetailModal({
           </div>
 
           <div className="flex-1 overflow-y-scroll px-4 py-4">
-            <div className="space-y-2.5">
-              {detailFields.map((field) => (
-                <div
-                  key={field.label}
-                  className="flex items-center justify-between gap-3 text-left"
-                >
-                  <span className="text-admin-label text-[13px] font-medium">
-                    {field.label}
-                  </span>
-                  <span className="text-admin-white text-[14px] font-medium">
-                    {field.value}
-                  </span>
+            {/*api*/}
+            {isLoading && (
+              <p className="text-admin-sub py-12 text-center text-[13px] font-medium">
+                지원서 상세 정보를 불러오는 중이에요.
+              </p>
+            )}
+            {/*api*/}
+            {!isLoading && errorMessage && (
+              <p className="text-admin-red py-12 text-center text-[13px] font-medium">
+                {errorMessage}
+              </p>
+            )}
+            {!isLoading && !errorMessage && currentApplication && (
+              <>
+                <div className="space-y-2.5">
+                  {detailFields.map((field) => (
+                    <div
+                      key={field.label}
+                      className="flex items-center justify-between gap-3 text-left"
+                    >
+                      <span className="text-admin-label text-[13px] font-medium">
+                        {field.label}
+                      </span>
+                      <span className="text-admin-white text-[14px] font-medium">
+                        {field.value}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            <div className="mt-6 space-y-5">
-              {questions.map((item, index) => (
-                <div key={`${item.question}-${index}`} className="space-y-2">
-                  <div className="text-admin-sub flex items-center justify-between text-[12px] font-medium">
-                    <span>{item.question}</span>
-                    <span>
-                      {item.submittedCount ?? item.answer.replace(/\s/g, "").length}
-                      자 제출됨
-                    </span>
-                  </div>
-                  <div className="bg-admin-box rounded-[10px] px-4 py-4 text-left text-[13px] leading-7 whitespace-pre-line text-admin-white">
-                    {item.answer}
-                  </div>
+                <div className="mt-6 space-y-5">
+                  {questions.length === 0 && (
+                    <p className="text-admin-sub text-left text-[13px] font-medium">
+                      등록된 답변이 없어요.
+                    </p>
+                  )}
+                  {questions.map((item, index) => (
+                    <div key={`${item.question}-${index}`} className="space-y-2">
+                      <div className="text-admin-sub flex items-center justify-between text-[12px] font-medium">
+                        <span>{item.question}</span>
+                        <span>
+                          {item.submittedCount ??
+                            item.answer.replace(/\s/g, "").length}
+                          자 제출됨
+                        </span>
+                      </div>
+                      <div className="bg-admin-box rounded-[10px] px-4 py-4 text-left text-[13px] leading-7 whitespace-pre-line text-admin-white">
+                        {item.answer}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            )}
           </div>
 
           <div className="border-admin-outline-2 border-t px-4 py-3">
