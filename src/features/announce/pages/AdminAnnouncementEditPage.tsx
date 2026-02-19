@@ -114,7 +114,6 @@ function AdminAnnouncementEditPage() {
         } else if (error instanceof Error) {
           msg = error.message;
         }
-      } finally {
         setMessage(msg);
         setActiveModal(true);
       }
