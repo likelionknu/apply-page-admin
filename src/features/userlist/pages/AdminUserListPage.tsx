@@ -1,5 +1,6 @@
 import { useState } from "react";
 import dropDown from "@userlist/assets/drop.png";
+import checkIcon from "@userlist/assets/check.png";
 
 import Header from "@shared/components/Header";
 import Footer from "@shared/components/Footer";
@@ -8,42 +9,25 @@ import UserRow from "../components/UserRow";
 import UserDetailModal from "@userlist/components/modal/UserDetailmodal";
 import ConfirmModal from "@userlist/components/modal/ConfirmModal";
 import type { AdminUser } from "@userlist/types/userProps";
-import { MOCK_USERS } from "@userlist/mock/mockuser";
-
-type ModalType =
-  | null
-  | "roleConfirm"
-  | "roleSuccess"
-  | "deleteConfirm"
-  | "deleteSuccess";
+import { useAdminUsers } from "@userlist/hooks/useAdminUsers";
+import { useUserModal } from "@userlist/hooks/useUserModal";
 
 function AdminUserListPage() {
-  const [users, setUsers] = useState<AdminUser[]>(MOCK_USERS);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [hideAdmin, setHideAdmin] = useState(false);
   const [detailUser, setDetailUser] = useState<AdminUser | null>(null);
   const [confirmRole, setConfirmRole] = useState<"사용자" | "관리자" | null>(
     null,
   );
-  const [modalType, setModalType] = useState<ModalType>(null);
-
-  const filteredUsers = hideAdmin
-    ? users.filter((user) => user.role !== "관리자")
-    : users;
-
-  const toggleHideAdmin = () => {
-    setHideAdmin((prev) => {
-      const next = !prev;
-      if (next && selectedId) {
-        const selectedUser = users.find((u) => u.id === selectedId);
-        if (selectedUser?.role === "관리자") {
-          setSelectedId(null);
-        }
-      }
-      return next;
-    });
-  };
+  const {
+    users,
+    filteredUsers,
+    selectedId,
+    setSelectedId,
+    hideAdmin,
+    toggleHideAdmin,
+    changeUserRole,
+    removeUser,
+  } = useAdminUsers();
 
   const openConfirmModal = (newRole: "사용자" | "관리자") => {
     if (!selectedId) return;
@@ -52,52 +36,32 @@ function AdminUserListPage() {
     setModalType("roleConfirm");
   };
 
-  const handleConfirmChange = () => {
-    if (!selectedId || !confirmRole) return;
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === selectedId ? { ...user, role: confirmRole } : user,
-      ),
-    );
-    setModalType("roleSuccess");
-  };
-
-  const handleDeleteConfirm = () => {
+  const handleConfirm = async (type: "role" | "delete") => {
     if (!selectedId) return;
-    setUsers((prev) => prev.filter((user) => user.id !== selectedId));
-    setSelectedId(null);
-    if (detailUser?.id === selectedId) {
-      setDetailUser(null);
-    }
-    setModalType("deleteSuccess");
-  };
 
-  const modalConfig = {
-    roleConfirm: {
-      title: "사용자 권한 변경",
-      description: `사용자의 권한을 변경할까요?\n이 작업은 즉시 적용되며, 되돌릴 수 없어요`,
-      onConfirm: handleConfirmChange,
-      onCancel: () => setModalType(null),
-    },
-    roleSuccess: {
-      title: "사용자 권한 변경",
-      description: "사용자의 권한을 변경했어요.",
-      onConfirm: () => setModalType(null),
-    },
-    deleteConfirm: {
-      title: "사용자 강제 삭제",
-      description:
-        "선택한 사용자를 서비스에서 강제 삭제할까요?\n이 작업은 되돌릴 수 없어요",
-      confirmText: "삭제",
-      onConfirm: handleDeleteConfirm,
-      onCancel: () => setModalType(null),
-    },
-    deleteSuccess: {
-      title: "사용자 강제 삭제",
-      description: "사용자를 서비스에서 강제 삭제했어요.",
-      onConfirm: () => setModalType(null),
-    },
+    try {
+      if (type === "role" && confirmRole) {
+        await changeUserRole(selectedId, confirmRole);
+        setModalType("roleSuccess");
+      }
+
+      if (type === "delete") {
+        await removeUser(selectedId);
+
+        if (detailUser?.id === selectedId) {
+          setDetailUser(null);
+        }
+
+        setModalType("deleteSuccess");
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
+  const { modalType, setModalType, modalConfig } = useUserModal({
+    onRoleConfirm: () => handleConfirm("role"),
+    onDeleteConfirm: () => handleConfirm("delete"),
+  });
 
   return (
     <div className="bg-admin-background text-admin-white min-h-screen">
@@ -111,13 +75,12 @@ function AdminUserListPage() {
             onClick={toggleHideAdmin}
             className="flex cursor-pointer items-center gap-2 select-none"
           >
-            <div
-              className={`h-4 w-4 rounded-full border transition ${
-                hideAdmin
-                  ? "border-admin-white bg-admin-white"
-                  : "border-admin-white"
-              }`}
-            />
+            {hideAdmin ? (
+              <img src={checkIcon} alt="checked" className="h-4 w-4" />
+            ) : (
+              <div className="border-admin-white h-4 w-4 rounded-full border" />
+            )}
+
             <span className="text-[14px] font-medium">관리자 숨기기</span>
           </div>
 
@@ -173,7 +136,7 @@ function AdminUserListPage() {
             </button>
           </div>
         </div>
-
+        {/* 유저 테이블 베너 */}
         <div className="space-y-2.5">
           <div className="bg-admin-box text-admin-sub text-md grid h-9 grid-cols-[40px_60px_100px_240px_140px_250px_240px_80px] items-center rounded-[10px] px-4">
             <span></span>
@@ -185,7 +148,7 @@ function AdminUserListPage() {
             <span className="text-center">최근 접속일</span>
             <span className="text-center">권한</span>
           </div>
-
+          {/* 유저 행 */}
           {filteredUsers.map((user, index) => (
             <UserRow
               key={user.id}
@@ -198,7 +161,6 @@ function AdminUserListPage() {
           ))}
         </div>
       </div>
-
       <div className="mt-75">
         <Footer />
       </div>

@@ -1,15 +1,15 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AnnouncementCard from "../components/AnnouncementCard";
 import AnnouncementFilterDropdown from "../components/AnnouncementFilterDropdown";
 import type {
   Announcement,
-  AnnouncementStatus,
   Filter,
   FilterOption,
 } from "../types/AnnouncementManagement";
 import logoImg from "@shared/assets/logo.png";
 import Footer from "@shared/components/Footer";
 import Header from "@shared/components/Header";
+import { getRecruitAnnouncements } from "../apis/recruits";
 
 const FILTER_OPTIONS: FilterOption[] = [
   { value: "전체", label: "전체" },
@@ -18,46 +18,10 @@ const FILTER_OPTIONS: FilterOption[] = [
   { value: "완료", label: "종료" },
 ];
 
-const MOCK_UPCOMING: Announcement[] = Array.from({ length: 9 }).map((_, i) => ({
-  id: `a-upcoming-${i + 1}`,
-  status: "예정",
-  title: "14기 강남대학교 멋쟁이사자처럼 아기사자 모집 - 백엔드 파트",
-  period: "2025.00.00 00:00 ~ 2026.00.00 00:00",
-  stats: "제출 32 · 임시저장 3",
-}));
-
-const MOCK_OPEN: Announcement[] = Array.from({ length: 9 }).map((_, i) => ({
-  id: `a-open-${i + 1}`,
-  status: "모집 중",
-  title: "14기 강남대학교 멋쟁이사자처럼 아기사자 모집 - 백엔드 파트",
-  period: "2025.00.00 00:00 ~ 2026.00.00 00:00",
-  stats: "제출 32 · 임시저장 3",
-}));
-
-const MOCK_ENDED: Announcement[] = Array.from({ length: 9 }).map((_, i) => ({
-  id: `a-ended-${i + 1}`,
-  status: "완료",
-  title: "14기 강남대학교 멋쟁이사자처럼 아기사자 모집 - 백엔드 파트",
-  period: "2025.00.00 00:00 ~ 2026.00.00 00:00",
-  stats: "제출 32 · 임시저장 3",
-}));
-
-const MOCK_ALL: Announcement[] = [
-  ...MOCK_UPCOMING.slice(0, 3),
-  ...MOCK_OPEN.slice(0, 3),
-  ...MOCK_ENDED.slice(0, 3),
-];
-
-const ANNOUNCEMENTS_BY_FILTER: Record<AnnouncementStatus, Announcement[]> = {
-  예정: MOCK_UPCOMING,
-  "모집 중": MOCK_OPEN,
-  완료: MOCK_ENDED,
-};
-
 const WEB_NEW_ANNOUNCEMENT_BUTTON_CLASS =
-  "cursor-pointer h-9.25 w-22.5 rounded-xl border border-admin-outline/10 bg-admin-outline/10 text-sm font-normal text-admin-white";
+  "cursor-pointer h-9.25 w-22.5 rounded-xl bg-admin-box text-sm font-normal text-admin-white";
 const MOBILE_NEW_ANNOUNCEMENT_BUTTON_CLASS =
-  "cursor-pointer h-9 w-23.75 rounded-xl border border-admin-outline/10 bg-admin-outline/10 text-[13px] font-normal text-admin-white";
+  "cursor-pointer h-9 w-23.75 rounded-xl bg-admin-box text-[13px] font-normal text-admin-white";
 
 const MOBILE_FOOTER_DESCRIPTION = `실습실 : 경기도 용인시 기흥구 강남로 40 강남대학교 후생관 104호
 동아리실 : 경기도 용인시 기흥구 강남로 40 강남대학교 후생관 멋쟁이사자처럼
@@ -65,11 +29,48 @@ const MOBILE_FOOTER_DESCRIPTION = `실습실 : 경기도 용인시 기흥구 강
 
 function AdminAnnouncementManagementPage() {
   const [filter, setFilter] = useState<Filter>("전체");
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchAnnouncements = async () => {
+      setIsLoading(true);
+      setErrorMessage(null);
+
+      try {
+        const list = await getRecruitAnnouncements();
+        if (mounted) {
+          setAnnouncements(list);
+        }
+      } catch (error) {
+        if (mounted) {
+          setErrorMessage(
+            error instanceof Error
+              ? error.message
+              : "공고 목록을 불러오지 못했어요.",
+          );
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchAnnouncements();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const filteredAnnouncements = useMemo(() => {
-    if (filter === "전체") return MOCK_ALL;
-    return ANNOUNCEMENTS_BY_FILTER[filter];
-  }, [filter]);
+    if (filter === "전체") return announcements;
+    return announcements.filter((announcement) => announcement.status === filter);
+  }, [announcements, filter]);
 
   return (
     <div className="bg-admin-background text-admin-white min-h-screen w-full">
@@ -122,13 +123,32 @@ function AdminAnnouncementManagementPage() {
                 className="mt-6 flex flex-col gap-3"
                 aria-label="모바일 공고 목록"
               >
-                {filteredAnnouncements.slice(0, 9).map((announcement) => (
-                  <AnnouncementCard
-                    key={announcement.id}
-                    announcement={announcement}
-                    variant="mobile"
-                  />
-                ))}
+                {isLoading && (
+                  <p className="text-admin-sub py-8 text-center text-sm">
+                    공고 목록을 불러오는 중이에요.
+                  </p>
+                )}
+                {!isLoading && errorMessage && (
+                  <p className="text-admin-red py-8 text-center text-sm">
+                    {errorMessage}
+                  </p>
+                )}
+                {!isLoading &&
+                  !errorMessage &&
+                  filteredAnnouncements.length === 0 && (
+                    <p className="text-admin-sub py-8 text-center text-sm">
+                      등록된 공고가 없어요.
+                    </p>
+                  )}
+                {!isLoading &&
+                  !errorMessage &&
+                  filteredAnnouncements.slice(0, 9).map((announcement) => (
+                    <AnnouncementCard
+                      key={announcement.id}
+                      announcement={announcement}
+                      variant="mobile"
+                    />
+                  ))}
               </section>
             </div>
           </div>
@@ -179,14 +199,33 @@ function AdminAnnouncementManagementPage() {
             {/* 공고 카드 목록 영역 */}
             <div className="mt-12 flex justify-center">
               <section className="h-133.75 w-298.5" aria-label="웹 공고 목록">
-                <div className="grid grid-cols-3 gap-x-7.5 gap-y-5">
-                  {filteredAnnouncements.slice(0, 9).map((announcement) => (
-                    <AnnouncementCard
-                      key={announcement.id}
-                      announcement={announcement}
-                    />
-                  ))}
-                </div>
+                {isLoading && (
+                  <p className="text-admin-sub py-20 text-center text-sm">
+                    공고 목록을 불러오는 중이에요.
+                  </p>
+                )}
+                {!isLoading && errorMessage && (
+                  <p className="text-admin-red py-20 text-center text-sm">
+                    {errorMessage}
+                  </p>
+                )}
+                {!isLoading &&
+                  !errorMessage &&
+                  filteredAnnouncements.length === 0 && (
+                    <p className="text-admin-sub py-20 text-center text-sm">
+                      등록된 공고가 없어요.
+                    </p>
+                  )}
+                {!isLoading && !errorMessage && (
+                  <div className="grid grid-cols-3 gap-x-7.5 gap-y-5">
+                    {filteredAnnouncements.slice(0, 9).map((announcement) => (
+                      <AnnouncementCard
+                        key={announcement.id}
+                        announcement={announcement}
+                      />
+                    ))}
+                  </div>
+                )}
               </section>
             </div>
           </div>

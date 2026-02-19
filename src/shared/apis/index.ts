@@ -71,7 +71,7 @@ api.interceptors.response.use(
         // 재발급 실패 시 로그아웃
         console.error("Session expired:", refreshError);
         sessionStorage.clear();
-        window.location.href = "/main";
+        window.location.href = "/";
         return Promise.reject(refreshError);
       }
     }
