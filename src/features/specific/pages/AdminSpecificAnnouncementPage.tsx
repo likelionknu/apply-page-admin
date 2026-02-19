@@ -1,7 +1,7 @@
 import Header from "../../../shared/components/Header";
 import { useEffect, useState } from "react";
 import { api } from "@shared/apis";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import UnCheckCircle from "../assets/UnCheckCircle.png";
 import CheckedCircle1 from "../assets/CheckedCircle1.png";
@@ -16,6 +16,7 @@ import { AnnouncementDeleteButton } from "@specific/components/ApplicationDelete
 import { AnnouncementMemo } from "@specific/components/AnnouncementMemo";
 
 const AdminSpecificAnnouncementPage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [isHidden, setIsHidden] = useState(false);
 
@@ -35,7 +36,7 @@ const AdminSpecificAnnouncementPage = () => {
   });
 
   const getAnnouncementInfo = async () => {
-    const res = await api.get("/v1/admin/recruits/2");
+    const res = await api.get("/v1/admin/recruits/${id}");
     return res.data;
   };
 
@@ -81,7 +82,7 @@ const AdminSpecificAnnouncementPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.get("/v1/admin/recruits/2/applications");
+      const res = await api.get("/v1/admin/recruits/${id}/applications");
       setUsers(res.data.data);
     };
 
@@ -100,13 +101,15 @@ const AdminSpecificAnnouncementPage = () => {
   // ----------------------------- 특정 지원서 부분 api 끝 -----------------------------
   // ----------------------------- 1차 결과 발표 부분 api  -----------------------------
   const firstPassApi = async () => {
-    const res = await api.get("/v1/admin/recruits/2/notifications/document");
+    const res = await api.get(
+      "/v1/admin/recruits/${id}/notifications/document",
+    );
     return res.data;
   };
   // ----------------------------- 1차 결과 발표 부분 api 끝  -----------------------------
   // ----------------------------- 2차 결과 발표 부분 api  -------------------------------
   const secondPassApi = async () => {
-    const res = await api.get("/v1/admin/recruits/2/notifications/final");
+    const res = await api.get("/v1/admin/recruits/${id}/notifications/final");
     return res.data;
   };
   // ----------------------------- 2차 결과 발표 부분 api 끝  -----------------------------
