@@ -53,7 +53,7 @@ function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AdminLoginPage />} />
-        <Route path="/callback" element={<GoogleCallback />} />
+        <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
         <Route path="/admin/user-list" element={<AdminUserListPage />} />
         <Route
