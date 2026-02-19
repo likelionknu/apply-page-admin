@@ -52,9 +52,9 @@ api.interceptors.response.use(
         if (!refreshToken) throw new Error("No refresh token");
 
         // 토큰 재발급 요청 (axios.post 사용)
-        const { data } = await axios.post(`${BASE_URL}/v1/auth/reissue`, {
-          refresh_token: refreshToken,
-        });
+        const { data } = await axios.post(
+          `${BASE_URL}/v1/auth/reissue?refresh_token=${refreshToken}`,
+        );
 
         // 새 토큰 저장 (백엔드 응답 구조인 data.data... 확인 필요)
         const { access_token, refresh_token } = data.data;
