@@ -5,17 +5,18 @@ const GoogleCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get("code");
-
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
     if (!code) {
       navigate("/");
       return;
     }
 
+    const platform = "ADMIN";
     const encodedCode = encodeURIComponent(code);
 
     fetch(
-      `${import.meta.env.VITE_BASE_API_URL}/v1/auth/login?code=${encodedCode}`,
+      `${import.meta.env.VITE_BASE_API_URL}/v1/auth/login?code=${encodedCode}&platform=${platform}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
