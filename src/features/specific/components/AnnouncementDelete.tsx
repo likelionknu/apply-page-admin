@@ -4,9 +4,13 @@ import { api } from "@shared/apis";
 
 import { useState } from "react";
 
-export const AnnouncementDelete = () => {
+interface AnnouncementDeleteProps {
+  id: number;
+}
+
+export const AnnouncementDelete = ({ id }: AnnouncementDeleteProps) => {
   const deleteAnnouncement = async () => {
-    const res = await api.delete("/v1/admin/recruits/2");
+    const res = await api.delete(`/v1/admin/recruits/${id}`);
     return res.data;
   };
 

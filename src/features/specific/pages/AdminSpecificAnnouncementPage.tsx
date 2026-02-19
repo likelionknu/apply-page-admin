@@ -36,7 +36,7 @@ const AdminSpecificAnnouncementPage = () => {
   });
 
   const getAnnouncementInfo = async () => {
-    const res = await api.get("/v1/admin/recruits/${id}");
+    const res = await api.get(`/v1/admin/recruits/${id}`);
     return res.data;
   };
 
@@ -82,7 +82,7 @@ const AdminSpecificAnnouncementPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.get("/v1/admin/recruits/${id}/applications");
+      const res = await api.get(`/v1/admin/recruits/${id}/applications`);
       setUsers(res.data.data);
     };
 
@@ -102,14 +102,14 @@ const AdminSpecificAnnouncementPage = () => {
   // ----------------------------- 1차 결과 발표 부분 api  -----------------------------
   const firstPassApi = async () => {
     const res = await api.get(
-      "/v1/admin/recruits/${id}/notifications/document",
+      `/v1/admin/recruits/${id}/notifications/document`,
     );
     return res.data;
   };
   // ----------------------------- 1차 결과 발표 부분 api 끝  -----------------------------
   // ----------------------------- 2차 결과 발표 부분 api  -------------------------------
   const secondPassApi = async () => {
-    const res = await api.get("/v1/admin/recruits/${id}/notifications/final");
+    const res = await api.get(`/v1/admin/recruits/${id}/notifications/final`);
     return res.data;
   };
   // ----------------------------- 2차 결과 발표 부분 api 끝  -----------------------------
@@ -131,7 +131,7 @@ const AdminSpecificAnnouncementPage = () => {
             {announcement.title}
           </div>
           <div className="flex gap-4">
-            <AnnouncementDelete />
+            <AnnouncementDelete id={Number(id)} />
             <div
               onClick={() => navigate("/admin/announcements/edit")}
               className="bg-admin-box flex h-9 w-24 cursor-pointer items-center justify-center rounded-[10px] text-center text-sm font-medium text-white hover:opacity-70"
