@@ -41,14 +41,6 @@ const AdminSpecificAnnouncementPage = () => {
     questions: [],
   });
 
-
-  const getAnnouncementInfo = async (targetRecruitId: number) => {
-    const res = await api.get(`/v1/admin/recruits/${targetRecruitId}`);
-
-    return res.data;
-  };
-
-
   useEffect(() => {
     if (!hasValidRecruitId) {
       return;
@@ -56,18 +48,14 @@ const AdminSpecificAnnouncementPage = () => {
 
     const specificAnnouncementInfoApi = async () => {
       try {
-
         const res = await api.get(`/v1/admin/recruits/${id}`);
         setAnnouncement(res.data.data);
-
       } catch (error) {
         console.error("에러:", error);
       }
     };
     specificAnnouncementInfoApi();
-
   }, [id, hasValidRecruitId]);
-
 
   // ----------------------------- 제목 부분 api 끝 -----------------------------
   // ----------------------------- 작성자 정보 부분 api -----------------------------
@@ -109,9 +97,7 @@ const AdminSpecificAnnouncementPage = () => {
     };
 
     fetchData();
-
-  }, [id, hasValidRecruitId]);
-
+  }, [recruitId, hasValidRecruitId]);
 
   // ----------------------------- 작성자 정보 부분 api 끝 -----------------------------
   // ----------------------------- 특정 지원서 부분 api -----------------------------
