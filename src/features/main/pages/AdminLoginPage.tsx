@@ -1,29 +1,15 @@
 import { useState } from "react";
 import Footer from "@shared/components/Footer";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Modal from "@shared/components/Modal";
 
-import googleImg from "@shared/assets/google.png";
 import linkImg from "@shared/assets/link.png";
 import mainLogoImg from "@shared/assets/loginlogo.png";
 import Button from "@shared/components/Button";
+import GoogleLogin from "@main/components/GoogleLogin";
 
 function AdminLoginPage() {
   const [showNoAccessModal, setShowNoAccessModal] = useState(false);
-  const navigate = useNavigate();
-
-  const handleGoogleLogin = () => {
-    // const fakeEmail = "member@example.com"; //허용x
-    const fakeEmail = "admin1@likelion.com"; //허용
-
-    const allowedAdmins = ["admin1@likelion.com", "admin2@likelion.com"];
-
-    if (allowedAdmins.includes(fakeEmail)) {
-      navigate("/admin/user-list");
-    } else {
-      setShowNoAccessModal(true);
-    }
-  };
 
   return (
     <div className="bg-admin-background flex w-full flex-col text-white">
@@ -40,19 +26,10 @@ function AdminLoginPage() {
           </p>
         </div>
 
-        <div className="bg-admin-box flex h-44.75 w-full max-w-130.25 flex-col items-center justify-center rounded-[10px] border border-none">
-          <button
-            onClick={handleGoogleLogin}
-            className="border-gray2 hover:bg-black2 m-5 flex cursor-pointer items-center rounded-lg border-[0.4px] px-5 py-2.5 text-white transition"
-          >
-            <img src={googleImg} alt="google" className="w-6" />
-            <p className="tracking-tight-custom ml-2.5 text-[16px] leading-140 font-semibold">
-              구글 계정으로 시작하기
-            </p>
-          </button>
-
+        <div className="bg-admin-box flex h-44.75 w-full max-w-130.25 flex-col items-center justify-center gap-5 rounded-[10px] border border-none">
+          <GoogleLogin />
           <Link
-            to={"https://apply-page-client.vercel.app/"}
+            to={"https://www.likelionknu.com"}
             className="text-admin-blue flex items-center justify-center hover:cursor-pointer"
           >
             <p className="mr-4">아기사자 지원페이지를 찾고 있나요?</p>

@@ -1,4 +1,5 @@
 import type { AdminUser } from "@userlist/types/userProps";
+import checkIcon from "@userlist/assets/check.png";
 
 interface Props extends AdminUser {
   order: number;
@@ -32,13 +33,11 @@ function UserRow({
         }}
         className="flex justify-center"
       >
-        <div
-          className={`h-5 w-5 rounded-full border ${
-            selected
-              ? "border-admin-white bg-admin-white"
-              : "border-admin-disable"
-          }`}
-        />
+        {selected ? (
+          <img src={checkIcon} alt="selected" className="h-5 w-5" />
+        ) : (
+          <div className="border-admin-disable h-5 w-5 rounded-full border" />
+        )}
       </div>
 
       <span className="text-center text-[14px]">{order}</span>
