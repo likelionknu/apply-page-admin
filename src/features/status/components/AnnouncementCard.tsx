@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type {
   Announcement,
   AnnouncementStatus,
@@ -26,6 +27,7 @@ function AnnouncementCard({
   announcement,
   variant = "web",
 }: AnnouncementCardProps) {
+  const navigate = useNavigate();
   const isMobile = variant === "mobile";
   const statusTextClass = isMobile ? "text-[11px]" : "text-xs";
   const titleTextClass = isMobile ? "text-sm" : "text-sm";
@@ -37,9 +39,14 @@ function AnnouncementCard({
   const titleSpacingClass = isMobile ? "" : "mt-2";
   const periodSpacingClass = isMobile ? "" : "mt-4";
   const statsSpacingClass = isMobile ? "" : "mt-auto";
+  const id = announcement.id;
+
+  const handleClick = () => {
+    navigate(`/admin/announcements/specific/${id}`);
+  };
 
   return (
-    <article className={ANNOUNCEMENT_CARD_CLASS[variant]}>
+    <article className={ANNOUNCEMENT_CARD_CLASS[variant]} onClick={handleClick}>
       <div className={contentWrapperClass}>
         {/* 공고 상태 라벨 (예정/모집 중/완료) */}
         <div
