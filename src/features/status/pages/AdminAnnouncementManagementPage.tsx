@@ -71,7 +71,9 @@ function AdminAnnouncementManagementPage() {
 
   const filteredAnnouncements = useMemo(() => {
     if (filter === "전체") return announcements;
-    return announcements.filter((announcement) => announcement.status === filter);
+    return announcements.filter(
+      (announcement) => announcement.status === filter,
+    );
   }, [announcements, filter]);
 
   return (
@@ -144,6 +146,7 @@ function AdminAnnouncementManagementPage() {
                   )}
                 {!isLoading &&
                   !errorMessage &&
+
                   filteredAnnouncements.slice(0, 9).map((announcement) => (
                     <AnnouncementCard
                       key={announcement.id}
@@ -154,6 +157,7 @@ function AdminAnnouncementManagementPage() {
                       }
                     />
                   ))}
+
               </section>
             </div>
           </div>

@@ -78,7 +78,6 @@ function AppRouter() {
         />
 
         {/* <Route path="*" element={<AdminLoginPage />} /> */}
-
       </Routes>
     </BrowserRouter>
   );

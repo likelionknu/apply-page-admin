@@ -19,6 +19,8 @@ import SpecificDetailModal from "@specific/components/modal/SpecificDetailmodal"
 const AdminSpecificAnnouncementPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const recruitId = Number(id);
+  const hasValidRecruitId = Number.isFinite(recruitId) && recruitId > 0;
   const [isHidden, setIsHidden] = useState(false);
   const [detailApplicationId, setDetailApplicationId] = useState<number | null>(
     null,
@@ -39,17 +41,34 @@ const AdminSpecificAnnouncementPage = () => {
     questions: [],
   });
 
+
+  const getAnnouncementInfo = async (targetRecruitId: number) => {
+    const res = await api.get(`/v1/admin/recruits/${targetRecruitId}`);
+
+    return res.data;
+  };
+
+
   useEffect(() => {
+    if (!hasValidRecruitId) {
+      return;
+    }
+
     const specificAnnouncementInfoApi = async () => {
       try {
+
         const res = await api.get(`/v1/admin/recruits/${id}`);
         setAnnouncement(res.data.data);
+
       } catch (error) {
         console.error("에러:", error);
       }
     };
     specificAnnouncementInfoApi();
-  }, [id]);
+
+  }, [id, hasValidRecruitId]);
+
+
   // ----------------------------- 제목 부분 api 끝 -----------------------------
   // ----------------------------- 작성자 정보 부분 api -----------------------------
 
@@ -80,13 +99,19 @@ const AdminSpecificAnnouncementPage = () => {
   const [users, setUsers] = useState<AdminRowApiProps[]>([]);
 
   useEffect(() => {
+    if (!hasValidRecruitId) {
+      return;
+    }
+
     const fetchData = async () => {
-      const res = await api.get(`/v1/admin/recruits/${id}/applications`);
+      const res = await api.get(`/v1/admin/recruits/${recruitId}/applications`);
       setUsers(res.data.data);
     };
 
     fetchData();
-  }, [id]);
+
+  }, [id, hasValidRecruitId]);
+
 
   // ----------------------------- 작성자 정보 부분 api 끝 -----------------------------
   // ----------------------------- 특정 지원서 부분 api -----------------------------
@@ -100,15 +125,25 @@ const AdminSpecificAnnouncementPage = () => {
   // ----------------------------- 특정 지원서 부분 api 끝 -----------------------------
   // ----------------------------- 1차 결과 발표 부분 api  -----------------------------
   const firstPassApi = async () => {
+    if (!hasValidRecruitId) {
+      throw new Error("Invalid recruit id");
+    }
+
     const res = await api.get(
-      `/v1/admin/recruits/${id}/notifications/document`,
+      `/v1/admin/recruits/${recruitId}/notifications/document`,
     );
     return res.data;
   };
   // ----------------------------- 1차 결과 발표 부분 api 끝  -----------------------------
   // ----------------------------- 2차 결과 발표 부분 api  -------------------------------
   const secondPassApi = async () => {
-    const res = await api.get(`/v1/admin/recruits/${id}/notifications/final`);
+    if (!hasValidRecruitId) {
+      throw new Error("Invalid recruit id");
+    }
+
+    const res = await api.get(
+      `/v1/admin/recruits/${recruitId}/notifications/final`,
+    );
     return res.data;
   };
   // ----------------------------- 2차 결과 발표 부분 api 끝  -----------------------------
@@ -130,9 +165,9 @@ const AdminSpecificAnnouncementPage = () => {
             {announcement.title}
           </div>
           <div className="flex gap-4">
-            <AnnouncementDelete id={Number(id)} />
+            <AnnouncementDelete id={recruitId} />
             <div
-              onClick={() => navigate("/admin/announcements/edit")}
+              onClick={() => navigate(`/admin/announcements/edit/${recruitId}`)}
               className="bg-admin-box flex h-9 w-24 cursor-pointer items-center justify-center rounded-[10px] text-center text-sm font-medium text-white hover:opacity-70"
             >
               공고 수정
