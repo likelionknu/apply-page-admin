@@ -52,8 +52,8 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AdminLoginPage />} />
-        <Route path="/callback" element={<GoogleCallback />} />
+        <Route path="/" element={<GoogleCallback />} />
+        <Route path="/login" element={<AdminLoginPage />} />
 
         <Route path="/admin/user-list" element={<AdminUserListPage />} />
         <Route
