@@ -5,8 +5,10 @@ import { createRecruit } from "@announce/apis";
 import RecruitInfoSection from "../components/RecruitInfoSection";
 import RecruitQuestionSection from "../components/RecruitQuestionSection";
 import { useRecruitForm } from "../hooks/useRecruitForm";
+import { useNavigate } from "react-router-dom";
 
 function AdminAnnouncementCreatePage() {
+  const navigate = useNavigate();
   const {
     recruitInfo,
     handleAddQuestion,
@@ -63,7 +65,9 @@ function AdminAnnouncementCreatePage() {
             <Modal.Description>{message}</Modal.Description>
           </Modal.TextLayout>
           <Modal.ButtonLayout>
-            <Button onClick={handleClose}>완료</Button>
+            <Button onClick={() => navigate("/admin/announcements/management")}>
+              완료
+            </Button>
           </Modal.ButtonLayout>
         </Modal>
       )}
