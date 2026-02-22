@@ -5,12 +5,28 @@ import InputLayout from "./InputLayout";
 import Label from "./Label";
 import SectionHeadr from "./SectionHeader";
 
+const formatLocalDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 const formatDate = (date: string | Date) => {
   if (!date) return "";
 
-  const d = new Date(date);
+  if (typeof date === "string") {
+    const matched = date.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (matched) {
+      return `${matched[1]}-${matched[2]}-${matched[3]}`;
+    }
+  }
 
-  return d.toISOString().split("T")[0];
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return "";
+
+  return formatLocalDate(parsed);
 };
 
 const formatDisplayDate = (date: string | Date) => {
@@ -20,21 +36,15 @@ const formatDisplayDate = (date: string | Date) => {
 };
 
 const parseDate = (date: string | Date) => {
-  if (!date) return null;
+  const normalized = formatDate(date);
+  if (!normalized) return null;
 
-  const parsed = new Date(date);
-
-  if (Number.isNaN(parsed.getTime())) return null;
-
-  return parsed;
+  const [year, month, day] = normalized.split("-").map(Number);
+  return new Date(year, month - 1, day);
 };
 
 const toInputDate = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
+  return formatLocalDate(date);
 };
 
 const isSameDay = (a: Date, b: Date) =>
