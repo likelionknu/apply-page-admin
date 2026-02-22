@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import Input from "../../../shared/components/Input";
-import calendarIcon from "../assets/calendar.png";
+import CalendarIcon from "../assets/calendar.png";
 import InputLayout from "./InputLayout";
 import Label from "./Label";
 import SectionHeadr from "./SectionHeader";
@@ -26,11 +26,13 @@ function DateInput({ value, placeholder, onChange }: DateInputProps) {
   const hiddenInputRef = useRef<HTMLInputElement>(null);
 
   const openDatePicker = () => {
-    const input = hiddenInputRef.current;
+    const input = hiddenInputRef.current as
+      | (HTMLInputElement & { showPicker?: () => void })
+      | null;
     if (!input) return;
 
     input.focus();
-    if ("showPicker" in input) {
+    if (typeof input.showPicker === "function") {
       input.showPicker();
       return;
     }
@@ -46,7 +48,7 @@ function DateInput({ value, placeholder, onChange }: DateInputProps) {
         className="bg-admin-box text-gray2 flex w-full items-center justify-between rounded-[10px] px-7 py-4 text-left"
       >
         <span>{formatDisplayDate(value) || placeholder}</span>
-        <img src={calendarIcon} alt="" className="h-4 w-4" />
+        <img src={CalendarIcon} alt="" className="h-4 w-4" />
       </button>
       <input
         ref={hiddenInputRef}
@@ -57,7 +59,7 @@ function DateInput({ value, placeholder, onChange }: DateInputProps) {
         }
         tabIndex={-1}
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-0 h-0 w-0 opacity-0"
+        className="pointer-events-none absolute top-0 left-0 h-0 w-0 opacity-0"
       />
     </div>
   );
