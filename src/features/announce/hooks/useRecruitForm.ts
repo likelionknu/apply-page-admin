@@ -59,8 +59,7 @@ export function useRecruitForm(initialValue: Recruit = initialRecruitInfo) {
   const handleDateChange = (key: "start_at" | "end_at", value: string) => {
     if (!value) return;
 
-    const dateObj = new Date(value);
-    setRecruitInfo((prev) => ({ ...prev, [key]: dateObj.toISOString() }));
+    setRecruitInfo((prev) => ({ ...prev, [key]: `${value}T00:00:00` }));
   };
 
   const handleQuestionChange = (index: number, value: string) => {
