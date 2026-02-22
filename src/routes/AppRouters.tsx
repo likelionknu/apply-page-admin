@@ -14,7 +14,6 @@ function AppRouter() {
       <Routes>
         <Route path="/" element={<GoogleCallback />} />
         <Route path="/login" element={<AdminLoginPage />} />
-
         <Route path="/admin/user-list" element={<AdminUserListPage />} />
         <Route
           path="/admin/announcements"
@@ -36,7 +35,6 @@ function AppRouter() {
           path="/admin/announcements/specific/:id"
           element={<AdminSpecificAnnouncementPage />}
         />
-
         {/* <Route path="*" element={<AdminLoginPage />} /> */}
       </Routes>
     </BrowserRouter>

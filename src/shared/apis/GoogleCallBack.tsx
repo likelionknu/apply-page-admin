@@ -27,13 +27,18 @@ const GoogleCallback = () => {
         return res.json();
       })
       .then((res) => {
-        const { access_token, refresh_token, name } = res.data;
+        const { access_token, refresh_token, name, role } = res.data;
+        if (role === "ADMIN") {
+          sessionStorage.setItem("accessToken", access_token);
+          sessionStorage.setItem("refreshToken", refresh_token);
+          sessionStorage.setItem("userName", name);
 
-        sessionStorage.setItem("accessToken", access_token);
-        sessionStorage.setItem("refreshToken", refresh_token);
-        sessionStorage.setItem("userName", name);
+          navigate("/admin/user-list");
+          return;
+        }
 
-        navigate("/admin/user-list");
+        sessionStorage.clear();
+        navigate("/login?reason=no-access", { replace: true });
       })
       .catch((err) => {
         console.error("Login error:", err);
