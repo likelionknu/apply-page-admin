@@ -5,7 +5,11 @@ const initialRecruitInfo: Recruit = {
   title: "",
   start_at: "",
   end_at: "",
-  questions: [],
+  questions: [
+    { priority: 1, question: "" },
+    { priority: 2, question: "" },
+    { priority: 3, question: "" },
+  ],
 };
 
 export function useRecruitForm(initialValue: Recruit = initialRecruitInfo) {
@@ -29,6 +33,8 @@ export function useRecruitForm(initialValue: Recruit = initialRecruitInfo) {
   };
 
   const handleDeleteQuestion = (targetIndex: number) => {
+    if (recruitInfo.questions.length === 1) return;
+
     setRecruitInfo((prev) => {
       const filteredQuestions = prev.questions.filter(
         (_, index) => index !== targetIndex,
