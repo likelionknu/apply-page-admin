@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logoImg from "../assets/logo.png";
 import userImg from "../assets/user.png";
 
@@ -7,12 +7,17 @@ const inactiveClass = "text-admin-sub hover:text-gray2";
 const activeClass = "  text-white";
 
 function Header() {
+  const navigate = useNavigate();
   const name = sessionStorage.getItem("userName");
+
   return (
     <header className="fixed z-100 flex h-20 w-full bg-[#131313] text-white">
       <nav className="mx-auto flex w-full max-w-360 items-center justify-between px-20">
         <div className="flex gap-14.5">
-          <div className="flex cursor-pointer items-center gap-1">
+          <div
+            className="flex cursor-pointer items-center gap-1"
+            onClick={() => navigate("/admin/user-list")}
+          >
             <img src={logoImg} alt="knu" className="h-[19.25px] w-[13.76px]" />
             <p className="p-2 text-[21px] font-bold">LIKELION KNU</p>
           </div>
