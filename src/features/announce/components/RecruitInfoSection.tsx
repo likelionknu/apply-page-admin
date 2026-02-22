@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import Input from "../../../shared/components/Input";
 import CalendarIcon from "../assets/calendar.png";
 import InputLayout from "./InputLayout";
@@ -18,48 +17,25 @@ const formatDisplayDate = (date: string | Date) => {
 
 interface DateInputProps {
   value: string | Date;
-  placeholder: string;
   onChange: (value: string) => void;
 }
 
-function DateInput({ value, placeholder, onChange }: DateInputProps) {
-  const hiddenInputRef = useRef<HTMLInputElement>(null);
-
-  const openDatePicker = () => {
-    const input = hiddenInputRef.current as
-      | (HTMLInputElement & { showPicker?: () => void })
-      | null;
-    if (!input) return;
-
-    input.focus();
-    if (typeof input.showPicker === "function") {
-      input.showPicker();
-      return;
-    }
-    input.click();
-  };
-
+function DateInput({ value, onChange }: DateInputProps) {
   return (
     <div className="relative">
-      <button
-        type="button"
-        onClick={openDatePicker}
-        onFocus={openDatePicker}
+      <div
         className="bg-admin-box text-gray2 flex w-full items-center justify-between rounded-[10px] px-7 py-4 text-left"
       >
-        <span>{formatDisplayDate(value) || placeholder}</span>
+        <span>{formatDisplayDate(value)}</span>
         <img src={CalendarIcon} alt="" className="h-4 w-4" />
-      </button>
+      </div>
       <input
-        ref={hiddenInputRef}
         type="date"
         value={formatDate(value)}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           onChange(e.target.value)
         }
-        tabIndex={-1}
-        aria-hidden="true"
-        className="pointer-events-none absolute top-0 left-0 h-0 w-0 opacity-0"
+        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
       />
     </div>
   );
@@ -96,7 +72,6 @@ function RecruitInfoSection({
           <InputLayout>
             <Label>모집 시작일을 선택해주세요.</Label>
             <DateInput
-              placeholder="2025.01.03"
               value={startAt}
               onChange={(value: string) => onDateChange("start_at", value)}
             />
@@ -104,7 +79,6 @@ function RecruitInfoSection({
           <InputLayout>
             <Label>모집 종료일을 선택해주세요.</Label>
             <DateInput
-              placeholder="2025.01.03"
               value={endAt}
               onChange={(value: string) => onDateChange("end_at", value)}
             />
