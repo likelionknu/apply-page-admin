@@ -9,7 +9,7 @@ export function SpecificQuestionCard({
   answer,
   submittedCount,
 }: SpecificQuestionCardProps) {
-  const count = submittedCount ?? answer.replace(/\s/g, "").length;
+  const count = submittedCount ?? answer.length;
 
   return (
     <div className="space-y-2.5">

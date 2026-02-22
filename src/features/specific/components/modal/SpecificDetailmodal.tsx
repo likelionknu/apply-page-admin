@@ -244,7 +244,7 @@ export default function SpecificDetailModal({
                         <span>{item.question}</span>
                         <span>
                           {item.submittedCount ??
-                            item.answer.replace(/\s/g, "").length}
+                            item.answer.length}
                           자 제출됨
                         </span>
                       </div>
