@@ -1,4 +1,11 @@
-import type { AdminUser, UserDetail } from "@userlist/types/userProps";
+import {
+  formatAcademicStatus,
+  formatGrade,
+  formatRole,
+  mapUserDetailResponseToAdminUser,
+  type AdminUser,
+  type UserDetailResponse,
+} from "@userlist/types/userProps";
 import { Field } from "./Field";
 import Modal from "@shared/components/Modal";
 import Button from "@shared/components/Button";
@@ -23,7 +30,7 @@ export default function UserDetailModal({
     const index = users.findIndex((user) => user.id === currentUserId);
     return index >= 0 ? index : 0;
   });
-  const [detail, setDetail] = useState<UserDetail | null>(null);
+  const [detail, setDetail] = useState<AdminUser | null>(null);
   const currentUser = users[currentIndex];
   const formatValue = (value: unknown) =>
     value === null || value === undefined || value === ""
@@ -36,7 +43,11 @@ export default function UserDetailModal({
       try {
         setLoading(true);
         const res = await getUserDetail(String(currentUser.id));
-        setDetail(res.data.data);
+        const mapped = mapUserDetailResponseToAdminUser(
+          res.data.data as UserDetailResponse,
+          currentUser.id,
+        );
+        setDetail(mapped);
       } catch (error) {
         let msg = "서버와 연결할 수 없습니다.";
         if (axios.isAxiosError(error)) {
@@ -72,7 +83,7 @@ export default function UserDetailModal({
   if (!detail) return null;
 
   return (
-    <div className="fixed inset-0 z-40 bg-black/60">
+    <div className="fixed inset-0 z-40">
       <Modal>
         <Modal.TextLayout>
           <div className="h-117 w-170.5">
@@ -115,12 +126,15 @@ export default function UserDetailModal({
                 )}
                 <Field label="이름" value={formatValue(detail.name)} />
                 <Field label="이메일 주소" value={formatValue(detail.email)} />
-                <Field label="학적 상태" value={formatValue(detail.status)} />
+                <Field
+                  label="학적 상태"
+                  value={formatAcademicStatus(detail.status)}
+                />
                 <Field label="전화번호" value={formatValue(detail.phone)} />
-                <Field label="학년" value={formatValue(detail.grade)} />
-                <Field label="학부" value={formatValue(detail.depart)} />
-                <Field label="학번" value={formatValue(detail.student_id)} />
-                <Field label="권한" value={formatValue(detail.role)} />
+                <Field label="학년" value={formatGrade(detail.grade)} />
+                <Field label="학부" value={formatValue(detail.department)} />
+                <Field label="학번" value={formatValue(detail.studentId)} />
+                <Field label="권한" value={formatRole(detail.role)} />
               </div>
             </div>
             <Button onClick={onClose}>완료</Button>
