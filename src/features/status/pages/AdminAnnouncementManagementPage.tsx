@@ -6,7 +6,6 @@ import type {
   Filter,
   FilterOption,
 } from "../types/AnnouncementManagement";
-import logoImg from "@shared/assets/logo.png";
 import Footer from "@shared/components/Footer";
 import Header from "@shared/components/Header";
 import { getRecruitAnnouncements } from "../apis/recruits";
@@ -23,10 +22,6 @@ const WEB_NEW_ANNOUNCEMENT_BUTTON_CLASS =
   "cursor-pointer h-9.25 w-22.5 rounded-xl bg-admin-box text-sm font-normal text-admin-white";
 const MOBILE_NEW_ANNOUNCEMENT_BUTTON_CLASS =
   "cursor-pointer h-9 w-23.75 rounded-xl bg-admin-box text-[13px] font-normal text-admin-white";
-
-const MOBILE_FOOTER_DESCRIPTION = `실습실 : 경기도 용인시 기흥구 강남로 40 강남대학교 후생관 104호
-동아리실 : 경기도 용인시 기흥구 강남로 40 강남대학교 후생관 멋쟁이사자처럼
-프로젝트 개발 : 프로젝트 코어`;
 
 function AdminAnnouncementManagementPage() {
   const navigate = useNavigate();
@@ -79,28 +74,8 @@ function AdminAnnouncementManagementPage() {
   return (
     <div className="bg-admin-background text-admin-white min-h-screen w-full">
       {/*모바일*/}
-      <div className="flex min-h-screen flex-col md:hidden">
-        <header className="border-admin-outline/10 flex h-16 items-center justify-between border-b px-6">
-          <div className="flex items-center gap-2">
-            <img src={logoImg} alt="LIKELION KNU" className="w-3.5" />
-            <p className="text-lg font-bold tracking-tight">LIKELION KNU</p>
-          </div>
-
-          <button
-            type="button"
-            className="text-admin-white/90 flex h-8 w-8 items-center justify-center"
-            aria-label="menu"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M5 7H19M5 12H19M5 17H19"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
-        </header>
+      <div className="flex min-h-screen flex-col pt-15 md:hidden">
+        <Header />
 
         <main className="grow pt-10 pb-8">
           <div className="mx-auto flex w-full flex-col items-center">
@@ -146,31 +121,26 @@ function AdminAnnouncementManagementPage() {
                   )}
                 {!isLoading &&
                   !errorMessage &&
-
-                  filteredAnnouncements.slice(0, 9).map((announcement) => (
-                    <AnnouncementCard
-                      key={announcement.id}
-                      announcement={announcement}
-                      variant="mobile"
-                      onClick={() =>
-                        navigate(`/admin/announcements/specific/${announcement.id}`)
-                      }
-                    />
-                  ))}
-
+                  filteredAnnouncements
+                    .slice(0, 9)
+                    .map((announcement) => (
+                      <AnnouncementCard
+                        key={announcement.id}
+                        announcement={announcement}
+                        variant="mobile"
+                        onClick={() =>
+                          navigate(
+                            `/admin/announcements/specific/${announcement.id}`,
+                          )
+                        }
+                      />
+                    ))}
               </section>
             </div>
           </div>
         </main>
 
-        <footer className="border-admin-outline/10 bg-admin-box mt-auto border-t px-8 py-9">
-          <div className="space-y-3 text-sm">
-            <p>© 2026 LIKELION KNU. All rights reserved.</p>
-            <p className="text-admin-sub leading-6 whitespace-pre-line">
-              {MOBILE_FOOTER_DESCRIPTION}
-            </p>
-          </div>
-        </footer>
+        <Footer />
       </div>
 
       {/*웹*/}
