@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import CloseImg from "../assets/cancel.png";
 
 // 최상위 모달 인터페이스
@@ -43,12 +44,22 @@ function ModalTextLayout({ children }: ModalTextProps) {
 }
 
 function ModalMain({ children }: ModalMainProps) {
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
   return (
-    <div className="border-admin-outline-2 fixed top-1/3 left-1/2 z-100 flex max-h-140 min-h-67 w-87 -translate-x-1/2 -translate-y-1/2 rounded-[10px] border bg-black md:top-1/2 md:w-auto md:min-w-107">
-      <div className="flex w-full flex-col justify-between text-center text-white">
-        {children}
+    <>
+      <div className="fixed inset-0 z-90 bg-black/70" />
+      <div className="border-admin-outline-2 fixed top-1/3 left-1/2 z-100 flex max-h-140 min-h-67 w-87 -translate-x-1/2 -translate-y-1/2 rounded-[10px] border bg-black md:top-1/2 md:w-auto md:min-w-107">
+        <div className="flex w-full flex-col justify-between text-center text-white">
+          {children}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
