@@ -41,7 +41,9 @@ const AnnouncementButton = ({
       {isOpen && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>{modalTitle}</Modal.Title>
+            <Modal.Title onClick={() => setIsOpen(false)}>
+              {modalTitle}
+            </Modal.Title>
             <Modal.Description>{modalDescription}</Modal.Description>
           </Modal.TextLayout>
 
@@ -59,7 +61,7 @@ const AnnouncementButton = ({
       {isOpenSecond && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>발송 완료</Modal.Title>
+            <Modal.Title onClick={ShipmentCompletion}>발송 완료</Modal.Title>
             <Modal.Description>{`사용자에 대한 결과를 발송했어요`}</Modal.Description>
           </Modal.TextLayout>
 
