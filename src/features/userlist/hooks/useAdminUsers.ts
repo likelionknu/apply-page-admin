@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { AdminUser, UserResponse } from "@userlist/types/userProps";
+import type { AdminUser, UserListResponse } from "@userlist/types/userProps";
 import { getUserList, deleteUser, updateUserRole } from "@userlist/apis";
 import axios from "axios";
 
@@ -13,14 +13,14 @@ export function useAdminUsers() {
       try {
         const res = await getUserList();
         const mappedUsers: AdminUser[] = res.data.data.map(
-          (user: UserResponse) => ({
+          (user: UserListResponse) => ({
             id: user.user_id,
             name: user.name,
             email: user.email,
-            major: user.depart,
+            department: user.depart,
             createdAt: user.created_at,
             lastLogin: user.last_accessed_at,
-            role: user.role === "ADMIN" ? "관리자" : "사용자",
+            role: user.role as "ADMIN" | "USER",
           }),
         );
         setUsers(mappedUsers);
@@ -44,7 +44,7 @@ export function useAdminUsers() {
   }, []);
 
   const filteredUsers = hideAdmin
-    ? users.filter((user) => user.role !== "관리자")
+    ? users.filter((user) => user.role !== "ADMIN")
     : users;
 
   const toggleHideAdmin = () => {
@@ -52,7 +52,7 @@ export function useAdminUsers() {
       const next = !prev;
       if (next && selectedId) {
         const selectedUser = users.find((u) => u.id === selectedId);
-        if (selectedUser?.role === "관리자") {
+        if (selectedUser?.role === "ADMIN") {
           setSelectedId(null);
         }
       }
@@ -60,15 +60,9 @@ export function useAdminUsers() {
     });
   };
 
-  const changeUserRole = async (
-    userId: number,
-    newRole: "사용자" | "관리자",
-  ) => {
-    const roleMap: Record<"사용자" | "관리자", "USER" | "ADMIN"> = {
-      사용자: "USER",
-      관리자: "ADMIN",
-    };
-    await updateUserRole(userId, roleMap[newRole]);
+  const changeUserRole = async (userId: number, newRole: "ADMIN" | "USER") => {
+    await updateUserRole(userId, newRole);
+
     setUsers((prev) =>
       prev.map((user) =>
         user.id === userId ? { ...user, role: newRole } : user,
