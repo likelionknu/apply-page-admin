@@ -150,7 +150,7 @@ export default function SpecificDetailModal({
                 </div>
 
                 {/* 질문/답변 카드 목록 */}
-                <div className="mt-8 space-y-7">
+                <div className="mt-8 space-y-7 select-text">
                   {questions.length === 0 && (
                     <p className="text-admin-sub text-left text-sm font-medium">
                       등록된 답변이 없어요.
@@ -229,7 +229,7 @@ export default function SpecificDetailModal({
                   ))}
                 </div>
 
-                <div className="mt-6 space-y-5">
+                <div className="mt-6 space-y-5 select-text">
                   {questions.length === 0 && (
                     <p className="text-admin-sub text-left text-[13px] font-medium">
                       등록된 답변이 없어요.
@@ -243,9 +243,7 @@ export default function SpecificDetailModal({
                       <div className="text-admin-sub flex items-center justify-between text-[12px] font-medium">
                         <span>{item.question}</span>
                         <span>
-                          {item.submittedCount ??
-                            item.answer.length}
-                          자 제출됨
+                          {item.submittedCount ?? item.answer.length}자 제출됨
                         </span>
                       </div>
                       <div className="bg-admin-box text-admin-white rounded-[10px] px-4 py-4 text-left text-[13px] leading-7 whitespace-pre-line">
