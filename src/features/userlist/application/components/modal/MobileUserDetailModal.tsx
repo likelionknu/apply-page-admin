@@ -52,7 +52,7 @@ export default function MobileUserDetailModal({
   if (!detail) return null;
 
   return (
-    <div className="fixed inset-0 z-40 bg-black/60">
+    <div className="fixed inset-0 z-40">
       <Modal>
         <Modal.TextLayout>
           <div className="h-91.5 w-87">

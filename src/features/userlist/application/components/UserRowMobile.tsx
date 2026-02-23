@@ -26,10 +26,7 @@ function UserRowMobile({
   onDeleteClick,
 }: Props) {
   return (
-    <div
-      onClick={onRowClick}
-      className="bg-admin-box w-87.5 rounded-[10px] p-4 pb-0"
-    >
+    <div className="bg-admin-box w-87.5 rounded-[10px] p-4 pb-0">
       {/* 상단 */}
       <div className="border-admin-outline-2 -mx-4 flex items-center justify-between border-b pb-3">
         {/* 왼쪽 */}
@@ -82,9 +79,13 @@ function UserRowMobile({
         />
         <InfoRow label="권한" value={formatRole(role)} />
       </div>
-      <div className="text-admin-blue flex h-8.25 items-center justify-center text-[10px] font-medium">
+      <button
+        type="button"
+        onClick={onRowClick}
+        className="text-admin-blue flex h-8.25 w-full items-center justify-center text-[10px] font-medium hover:cursor-pointer"
+      >
         상세정보 열람하기
-      </div>
+      </button>
     </div>
   );
 }
