@@ -11,8 +11,8 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // const token = sessionStorage.getItem("accessToken");
-    const token = import.meta.env.VITE_TEST_TOKEN;
+    const token = sessionStorage.getItem("accessToken");
+    // const token = import.meta.env.VITE_TEST_TOKEN;
 
     if (token) {
       config.headers = config.headers || {};

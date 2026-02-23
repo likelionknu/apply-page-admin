@@ -1,6 +1,5 @@
-import { useState } from "react";
 import Footer from "@shared/components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Modal from "@shared/components/Modal";
 
 import linkImg from "@shared/assets/link.png";
@@ -9,7 +8,14 @@ import Button from "@shared/components/Button";
 import GoogleLogin from "@main/components/GoogleLogin";
 
 function AdminLoginPage() {
-  const [showNoAccessModal, setShowNoAccessModal] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const showNoAccessModal = searchParams.get("reason") === "no-access";
+
+  const closeModal = () => {
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("reason");
+    setSearchParams(nextParams, { replace: true });
+  };
 
   return (
     <div className="bg-admin-background flex w-full flex-col text-white">
@@ -47,16 +53,14 @@ function AdminLoginPage() {
       {showNoAccessModal && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title onClick={() => setShowNoAccessModal(false)}>
-              접근 권한이 부족해요{" "}
-            </Modal.Title>
+            <Modal.Title onClick={closeModal}>접근 권한이 부족해요</Modal.Title>
             <Modal.Description>
               이 페이지는 운영진을 위한 페이지에요.{"\n"}
               일반 지원자는 대표 홈페이지에서 로그인해야 해요.
             </Modal.Description>
           </Modal.TextLayout>
           <Modal.ButtonLayout>
-            <Button onClick={() => setShowNoAccessModal(false)}>완료</Button>
+            <Button onClick={closeModal}>확인</Button>
           </Modal.ButtonLayout>
         </Modal>
       )}

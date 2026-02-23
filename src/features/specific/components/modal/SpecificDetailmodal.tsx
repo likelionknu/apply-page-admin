@@ -104,7 +104,10 @@ export default function SpecificDetailModal({
     >
       {/* 웹 */}
       <div className="hidden md:block">
-        <Modal>
+        <div
+          className="border-admin-outline-2 bg-admin-background text-admin-white fixed top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-[10px] border"
+          style={{ zIndex: 201, width: 682, height: "calc(100vh - 40px)" }}
+        >
           {/* 모달 헤더 */}
           <Modal.TextLayout>
             <Modal.Title onClick={onClose}>
@@ -120,10 +123,7 @@ export default function SpecificDetailModal({
           </Modal.TextLayout>
 
           {/* 기본 정보 + 질문/답변 영역 */}
-          <div
-            className="overflow-y-scroll px-5 pt-6"
-            style={{ maxHeight: "calc(100vh - 320px)" }}
-          >
+          <div className="flex-1 overflow-y-auto px-5 pt-6">
             {/*api*/}
             {isLoading && (
               <p className="text-admin-sub py-16 text-center text-sm font-medium">
@@ -175,18 +175,20 @@ export default function SpecificDetailModal({
               <Button onClick={onClose}>완료</Button>
             </div>
           </div>
-        </Modal>
+        </div>
       </div>
 
       {/* 모바일 */}
       <div className="block h-full p-1 md:hidden">
         <div
-          className="border-admin-outline-2 bg-admin-background mx-auto flex h-full w-full max-w-sm flex-col overflow-hidden rounded-[10px] border text-admin-white"
+          className="border-admin-outline-2 bg-admin-background text-admin-white mx-auto flex h-full w-full max-w-sm flex-col overflow-hidden rounded-[10px] border"
           style={{ maxHeight: "calc(100vh - 8px)" }}
         >
           <div className="border-admin-outline-2 flex items-center justify-between border-b px-4 py-4">
             <div className="flex items-center gap-4">
-              <h2 className="text-[16px] leading-none font-medium">지원서 상세보기</h2>
+              <h2 className="text-[16px] leading-none font-medium">
+                지원서 상세보기
+              </h2>
             </div>
             <img
               src={closeIcon}
@@ -234,16 +236,19 @@ export default function SpecificDetailModal({
                     </p>
                   )}
                   {questions.map((item, index) => (
-                    <div key={`${item.question}-${index}`} className="space-y-2">
+                    <div
+                      key={`${item.question}-${index}`}
+                      className="space-y-2"
+                    >
                       <div className="text-admin-sub flex items-center justify-between text-[12px] font-medium">
                         <span>{item.question}</span>
                         <span>
                           {item.submittedCount ??
-                            item.answer.replace(/\s/g, "").length}
+                            item.answer.length}
                           자 제출됨
                         </span>
                       </div>
-                      <div className="bg-admin-box rounded-[10px] px-4 py-4 text-left text-[13px] leading-7 whitespace-pre-line text-admin-white">
+                      <div className="bg-admin-box text-admin-white rounded-[10px] px-4 py-4 text-left text-[13px] leading-7 whitespace-pre-line">
                         {item.answer}
                       </div>
                     </div>
