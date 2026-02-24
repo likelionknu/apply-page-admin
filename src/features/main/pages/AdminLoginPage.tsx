@@ -19,11 +19,11 @@ function AdminLoginPage() {
 
   return (
     <div className="bg-admin-background flex w-full flex-col text-white">
-      <div className="mx-auto mt-30 flex min-h-screen w-full max-w-360 flex-col items-center gap-6">
+      <div className="mx-auto mt-30 flex min-h-dvh w-full max-w-360 flex-col items-center gap-6">
         <div className="flex flex-col">
           <div className="flex items-center gap-3">
-            <img src={mainLogoImg} alt="logo" className="h-10 w-7" />
-            <p className="text-[40px] leading-none font-semibold">
+            <img src={mainLogoImg} alt="logo" className="w-4.75 h-7 md:h-10 md:w-7" />
+            <p className="text-[30px] md:text-[40px] leading-none font-semibold">
               LIKELION KNU
             </p>
           </div>
@@ -32,17 +32,17 @@ function AdminLoginPage() {
           </p>
         </div>
 
-        <div className="bg-admin-box flex h-44.75 w-full max-w-130.25 flex-col items-center justify-center gap-5 rounded-[10px] border border-none">
+        <div className="bg-admin-box flex h-44.75 w-full md:max-w-130.25 max-w-87.5  flex-col items-center justify-center gap-5 rounded-[10px] border border-none">
           <GoogleLogin />
           <Link
             to={"https://www.likelionknu.com"}
             className="text-admin-blue flex items-center justify-center hover:cursor-pointer"
           >
-            <p className="mr-4">아기사자 지원페이지를 찾고 있나요?</p>
+            <p className="text-[13px] mr-2 md:mr-4">아기사자 지원페이지를 찾고 있나요?</p>
             <img
               src={linkImg}
               alt="linkToApplyPage"
-              className="h-4.25 w-4.25"
+              className="h-3 w-3 md:h-4.25 md:w-4.25"
             />
           </Link>
         </div>
