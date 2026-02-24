@@ -54,7 +54,7 @@ function ModalMain({ children }: ModalMainProps) {
   return (
     <>
       <div className="fixed inset-0 z-90 bg-black/70" />
-      <div className="border-admin-outline-2 fixed top-1/3 left-1/2 z-100 flex max-h-140 min-h-67 w-87 -translate-x-1/2 -translate-y-1/2 rounded-[10px] border bg-black md:top-1/2 md:w-auto md:min-w-107">
+      <div className="border-admin-outline-2 fixed top-1/2 left-1/2 z-100 flex max-h-140 min-h-67 w-87 -translate-x-1/2 -translate-y-1/2 rounded-[10px] border bg-black md:top-1/2 md:w-auto md:min-w-107">
         <div className="flex w-full flex-col justify-between text-center text-white">
           {children}
         </div>
