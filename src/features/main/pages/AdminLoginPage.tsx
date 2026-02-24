@@ -32,7 +32,7 @@ function AdminLoginPage() {
           </p>
         </div>
 
-        <div className="bg-admin-box flex h-44.75 w-full md:max-w-130.25 max-w-87.5 flex-col items-center justify-center gap-10 md:gap-5 rounded-[10px] border border-none">
+        <div className="bg-admin-box flex h-44.75 w-full md:max-w-130.25 max-w-87.5 flex-col items-center justify-center gap-8 md:gap-5 rounded-[10px] border border-none">
           <GoogleLogin />
           <Link
             to={"https://www.likelionknu.com"}
