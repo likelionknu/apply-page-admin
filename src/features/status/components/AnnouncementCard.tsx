@@ -30,14 +30,15 @@ function AnnouncementCard({
 }: AnnouncementCardProps) {
   const isMobile = variant === "mobile";
   const statusTextClass = isMobile ? "text-[11px]" : "text-xs";
-  const titleTextClass = isMobile ? "text-sm" : "text-sm";
+  const titleTextClass = isMobile ? "text-sm" : "text-[15px]";
+  const titleWidthClass = isMobile ? "w-[260px]" : "w-[280px]";
   const periodTextClass = isMobile ? "text-xs" : "text-sm";
   const statsTextClass = isMobile ? "text-[11px]" : "text-xs";
   const contentWrapperClass = isMobile
     ? "flex h-28.5 w-77.5 flex-col gap-2.5"
     : "flex h-full flex-col";
-  const titleSpacingClass = isMobile ? "" : "mt-2";
-  const periodSpacingClass = isMobile ? "" : "mt-4";
+  const titleSpacingClass = isMobile ? "" : "mt-[9px]";
+  const periodSpacingClass = isMobile ? "" : "mt-[15px]";
   const statsSpacingClass = isMobile ? "" : "mt-auto";
 
   return (
@@ -52,7 +53,7 @@ function AnnouncementCard({
 
         {/* 공고 제목 */}
         <div
-          className={`${titleSpacingClass} ${titleTextClass} leading-snug font-normal`}
+          className={`${titleSpacingClass} ${titleWidthClass} ${titleTextClass} leading-snug font-normal`}
         >
           {announcement.title}
         </div>
