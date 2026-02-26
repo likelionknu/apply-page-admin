@@ -129,7 +129,9 @@ export const AnnouncementMemo = ({ selectedId }: Props) => {
       {isOpenSecond && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>등록 완료</Modal.Title>
+            <Modal.Title onClick={RegistrationCompletion}>
+              등록 완료
+            </Modal.Title>
             <Modal.Description>{`사용자에 대한 메모를 등록했어요`}</Modal.Description>
           </Modal.TextLayout>
 

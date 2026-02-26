@@ -126,7 +126,9 @@ const AnnouncementReviewButton = ({
       {isOpenModal && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>지원서 검토 변경</Modal.Title>
+            <Modal.Title onClick={() => setIsOpenModal(false)}>
+              지원서 검토 변경
+            </Modal.Title>
             <Modal.Description>
               {`지원서 상태를 변경할까요?\n지원서 상태를 변경하면 사용자에게 즉시 공개돼요`}
             </Modal.Description>
@@ -149,7 +151,7 @@ const AnnouncementReviewButton = ({
       {isOpenSecond && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>변경 완료</Modal.Title>
+            <Modal.Title onClick={ChangeCompletion}>변경 완료</Modal.Title>
             <Modal.Description>{`사용자에 검토 변경를 등록했어요`}</Modal.Description>
           </Modal.TextLayout>
 
