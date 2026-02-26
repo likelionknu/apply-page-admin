@@ -35,7 +35,7 @@ function AppRouter() {
           path="/admin/announcements/specific/:id"
           element={<AdminSpecificAnnouncementPage />}
         />
-        {/* <Route path="*" element={<AdminLoginPage />} /> */}
+        <Route path="*" element={<AdminLoginPage />} />
       </Routes>
     </BrowserRouter>
   );
