@@ -29,7 +29,9 @@ export const AnnouncementDelete = ({ id }: AnnouncementDeleteProps) => {
       {isOpen && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>공고 삭제</Modal.Title>
+            <Modal.Title onClick={() => setIsOpen(false)}>
+              공고 삭제
+            </Modal.Title>
             <Modal.Description>
               이 공고에 지원한 사용자(임시저장 상태 포함)가 존재한다면 이 작업은
               거부될 수 있어요
@@ -63,7 +65,9 @@ export const AnnouncementDelete = ({ id }: AnnouncementDeleteProps) => {
       {isOpenSecond && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>공고 삭제</Modal.Title>
+            <Modal.Title onClick={() => setIsOpenSecond(false)}>
+              공고 삭제
+            </Modal.Title>
             <Modal.Description>{`요청한 공고를 삭제했어요`}</Modal.Description>
           </Modal.TextLayout>
 

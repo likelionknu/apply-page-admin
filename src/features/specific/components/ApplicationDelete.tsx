@@ -66,7 +66,9 @@ export const AnnouncementDeleteButton = ({ selectedId }: Props) => {
       {isOpen && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>지원서 삭제</Modal.Title>
+            <Modal.Title onClick={() => setIsOpen(false)}>
+              지원서 삭제
+            </Modal.Title>
             <Modal.Description>
               {`선택한 지원서를 삭제할까요?\n이 작업은 되돌릴 수 없어요.`}
             </Modal.Description>
@@ -87,7 +89,7 @@ export const AnnouncementDeleteButton = ({ selectedId }: Props) => {
       {isOpenSecond && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>지원서 삭제</Modal.Title>
+            <Modal.Title onClick={DeleteCompletion}>지원서 삭제</Modal.Title>
             <Modal.Description>{`요청한 사용자의 지원서를 삭제했어요`}</Modal.Description>
           </Modal.TextLayout>
 
