@@ -3,6 +3,8 @@ import Vector2 from "@specific/assets/Vector2.png";
 import Modal from "@shared/components/Modal";
 import Button from "@shared/components/Button";
 import { api } from "@shared/apis";
+import { useMediaQuery } from "react-responsive";
+import MobileArrow from "@specific/assets/MobileArrow.png";
 
 interface AdminStatusButtonProps {
   selectedId: number | null;
@@ -13,6 +15,8 @@ const AdminStatusButton = ({ selectedId }: AdminStatusButtonProps) => {
   const [statusOption, setStatusOption] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenSecond, setIsOpenSecond] = useState(false);
+
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -69,46 +73,90 @@ const AdminStatusButton = ({ selectedId }: AdminStatusButtonProps) => {
 
   return (
     <div ref={dropdownRef} className="relative flex flex-col items-center">
-      {/* 🔽 상단 버튼 */}
-      <div
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="bg-admin-box flex h-9 w-28 cursor-pointer items-center justify-center rounded-[10px] text-sm font-medium text-white hover:opacity-70"
-      >
-        <div className="flex items-center gap-4.25">
-          상태 변경
-          <img
-            className={`h-1.5 w-2.5 transition-transform duration-300 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-            src={Vector2}
-            alt="Vector2"
-          />
-        </div>
-      </div>
-
-      {/* 🔽 드롭다운 (absolute로 띄움) */}
-      {isOpen && (
-        <div className="bg-admin-box text-admin-sub scrollbar-hide absolute top-11 z-50 flex h-72 w-32 flex-col overflow-y-auto rounded-[10px] p-2 text-sm font-medium shadow-lg">
-          {Object.entries(STATUS_MAP).map(([korean, english]) => (
-            <div
-              key={english}
-              className="hover:text-admin-white flex w-full cursor-pointer items-center justify-center rounded-md py-2 transition-colors hover:bg-white/10"
-              onClick={() => {
-                if (!selectedId) {
-                  alert("상태 변경할 지원서를 선택해주세요.");
-                  return;
-                } else {
-                  setStatusOption(english);
-                  setIsOpenModal(true);
-                  console.log("API로 보낼 값:", english);
-                }
-              }}
-            >
-              {korean}
+      {isMobile ? (
+        <div
+          className="bg-admin-box flex h-9 w-full cursor-pointer items-center justify-center rounded-[10px]"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <div className="flex w-full items-center justify-between px-5">
+            <div className="text-admin-sub text-sm font-medium">
+              지원서 상태 변경
             </div>
-          ))}
+            <img src={MobileArrow} alt="MobileArrow" className="h-2 w-3" />
+          </div>
+        </div>
+      ) : (
+        <div
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="bg-admin-box flex h-9 w-28 cursor-pointer items-center justify-center rounded-[10px] text-sm font-medium text-white hover:opacity-70"
+        >
+          <div className="flex items-center gap-4.25">
+            상태 변경
+            <img
+              className={`h-1.5 w-2.5 transition-transform duration-300 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+              src={Vector2}
+              alt="Vector2"
+            />
+          </div>
         </div>
       )}
+
+      {isMobile ? (
+        <>
+          {isOpen && (
+            <div className="bg-admin-box text-admin-sub scrollbar-hide absolute top-11 z-50 flex h-72 w-full flex-col overflow-y-auto rounded-[10px] p-2 text-sm font-medium shadow-lg hover:text-white">
+              {Object.entries(STATUS_MAP).map(([korean, english]) => (
+                <div
+                  key={english}
+                  className="hover:text-admin-white flex w-full cursor-pointer items-center justify-center rounded-md py-2 transition-colors hover:bg-white/10"
+                  onClick={() => {
+                    if (!selectedId) {
+                      alert("상태 변경할 지원서를 선택해주세요.");
+                      return;
+                    } else {
+                      setStatusOption(english);
+                      setIsOpenModal(true);
+                      console.log("API로 보낼 값:", english);
+                    }
+                  }}
+                >
+                  {korean}
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {isOpen && (
+            <div className="bg-admin-box text-admin-sub scrollbar-hide absolute top-11 z-50 flex h-72 w-32 flex-col overflow-y-auto rounded-[10px] p-2 text-sm font-medium shadow-lg">
+              {Object.entries(STATUS_MAP).map(([korean, english]) => (
+                <div
+                  key={english}
+                  className="hover:text-admin-white flex w-full cursor-pointer items-center justify-center rounded-md py-2 transition-colors hover:bg-white/10"
+                  onClick={() => {
+                    if (!selectedId) {
+                      alert("상태 변경할 지원서를 선택해주세요.");
+                      return;
+                    } else {
+                      setStatusOption(english);
+                      setIsOpenModal(true);
+                      console.log("API로 보낼 값:", english);
+                    }
+                  }}
+                >
+                  {korean}
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* 🔽 드롭다운 (absolute로 띄움) */}
+
       {isOpenModal && (
         <Modal>
           <Modal.TextLayout>

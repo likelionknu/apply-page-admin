@@ -2,8 +2,8 @@ import Modal from "@shared/components/Modal";
 import Button from "@shared/components/Button";
 import { useState } from "react";
 import { api } from "@shared/apis";
-
-// @specific/components/ApplicationDelete.tsx (또는 해당 파일)
+import { useMediaQuery } from "react-responsive";
+import MobileArrow from "@specific/assets/MobileArrow.png";
 
 interface Props {
   selectedId: number | null;
@@ -12,6 +12,7 @@ interface Props {
 export const AnnouncementDeleteButton = ({ selectedId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSecond, setIsOpenSecond] = useState(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const DeleteCompletion = () => {
     setIsOpenSecond(false);
@@ -19,6 +20,11 @@ export const AnnouncementDeleteButton = ({ selectedId }: Props) => {
   };
 
   const handleDelete = async () => {
+    if (!selectedId) {
+      alert("삭제할 지원서를 선택해주세요.");
+      return;
+    }
+
     try {
       await api.delete(`/v1/admin/applications/${selectedId}`);
       setIsOpen(false);
@@ -31,17 +37,31 @@ export const AnnouncementDeleteButton = ({ selectedId }: Props) => {
 
   return (
     <>
-      <div
-        className="bg-admin-box flex h-9 w-28 cursor-pointer items-center justify-center rounded-[10px] text-sm font-medium text-white hover:opacity-70"
-        onClick={() => {
-          if (!selectedId) {
-            alert("메모할 지원서를 선택해주세요.");
-            return;
-          } else setIsOpen(true);
-        }}
-      >
-        지원서 삭제
-      </div>
+      {isMobile ? (
+        <div
+          className="bg-admin-box flex h-9 w-full cursor-pointer items-center justify-center rounded-[10px]"
+          onClick={() => setIsOpen(true)}
+        >
+          <div className="flex w-full items-center justify-between px-5">
+            <div className="text-admin-red text-sm font-medium">
+              지원서 삭제
+            </div>
+            <img src={MobileArrow} alt="MobileArrow" className="h-2 w-3" />
+          </div>
+        </div>
+      ) : (
+        <div
+          className="lg:bg-admin-box lg:flex lg:h-9 lg:w-28 lg:cursor-pointer lg:items-center lg:justify-center lg:rounded-[10px] lg:text-sm lg:font-medium lg:text-white lg:hover:opacity-70"
+          onClick={() => {
+            if (!selectedId) {
+              alert("삭제할 지원서를 선택해주세요.");
+              return;
+            } else setIsOpen(true);
+          }}
+        >
+          지원서 삭제
+        </div>
+      )}
 
       {isOpen && (
         <Modal>

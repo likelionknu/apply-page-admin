@@ -21,7 +21,7 @@ export const AnnouncementDelete = ({ id }: AnnouncementDeleteProps) => {
     <>
       <div
         onClick={() => setIsOpen(true)}
-        className="bg-admin-box flex h-9 w-24 cursor-pointer items-center justify-center rounded-[10px] text-center text-sm font-medium text-white hover:opacity-70"
+        className="bg-admin-box flex h-9 w-20.25 cursor-pointer items-center justify-center rounded-[10px] text-center text-xs font-medium text-white hover:opacity-70 lg:w-24 lg:text-sm"
       >
         공고 삭제
       </div>
