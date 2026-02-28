@@ -3,6 +3,8 @@ import CloseImg from "@shared/assets/cancel.png";
 import { api } from "@shared/apis";
 import Modal from "@shared/components/Modal";
 import Button from "@shared/components/Button";
+import { useMediaQuery } from "react-responsive";
+import MobileArrow from "@specific/assets/MobileArrow.png";
 
 interface Props {
   selectedId: number | null;
@@ -12,6 +14,7 @@ export const AnnouncementMemo = ({ selectedId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [memoSize, setMemoSize] = useState("");
   const [isOpenSecond, setIsOpenSecond] = useState(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const RegistrationCompletion = () => {
     setIsOpenSecond(false);
@@ -56,12 +59,24 @@ export const AnnouncementMemo = ({ selectedId }: Props) => {
 
   return (
     <>
-      <div
-        className="bg-admin-box flex h-9 w-28 cursor-pointer items-center justify-center rounded-[10px] text-sm font-medium text-white hover:opacity-70"
-        onClick={openModal}
-      >
-        메모 등록
-      </div>
+      {isMobile ? (
+        <div
+          className="bg-admin-box flex h-9 w-full cursor-pointer items-center justify-center rounded-[10px]"
+          onClick={() => setIsOpen(true)}
+        >
+          <div className="flex w-full items-center justify-between px-5">
+            <div className="text-admin-sub text-sm font-medium">메모 등록</div>
+            <img src={MobileArrow} alt="MobileArrow" className="h-2 w-3" />
+          </div>
+        </div>
+      ) : (
+        <div
+          className="bg-admin-box flex h-9 w-28 cursor-pointer items-center justify-center rounded-[10px] text-sm font-medium text-white hover:opacity-70"
+          onClick={openModal}
+        >
+          운영진 메모 등록
+        </div>
+      )}
 
       {isOpen && (
         <>
@@ -129,7 +144,9 @@ export const AnnouncementMemo = ({ selectedId }: Props) => {
       {isOpenSecond && (
         <Modal>
           <Modal.TextLayout>
-            <Modal.Title>등록 완료</Modal.Title>
+            <Modal.Title onClick={RegistrationCompletion}>
+              등록 완료
+            </Modal.Title>
             <Modal.Description>{`사용자에 대한 메모를 등록했어요`}</Modal.Description>
           </Modal.TextLayout>
 
