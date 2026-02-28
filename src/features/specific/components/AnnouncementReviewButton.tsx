@@ -3,6 +3,8 @@ import Vector2 from "@specific/assets/Vector2.png";
 import Modal from "@shared/components/Modal";
 import Button from "@shared/components/Button";
 import { api } from "@shared/apis";
+import { useMediaQuery } from "react-responsive";
+import MobileArrow from "@specific/assets/MobileArrow.png";
 
 interface AnnouncementReviewButtonProps {
   selectedId: number | null;
@@ -15,6 +17,7 @@ const AnnouncementReviewButton = ({
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [reviewState, setReviewState] = useState("");
   const [isOpenSecond, setIsOpenSecond] = useState(false);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -61,68 +64,137 @@ const AnnouncementReviewButton = ({
 
   return (
     <div ref={dropdownRef} className="relative flex flex-col items-center">
-      <div
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="bg-admin-box flex h-9 w-28 cursor-pointer items-center justify-center rounded-[10px] text-sm font-medium text-white hover:opacity-70"
-      >
-        <div className="flex items-center gap-4.25">
-          검토 변경
-          <img
-            className={`h-1.5 w-2.5 transition-transform duration-300 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-            src={Vector2}
-            alt="Vector2"
-          />
+      {isMobile ? (
+        <div
+          className="bg-admin-box flex h-9 w-full cursor-pointer items-center justify-center rounded-[10px]"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <div className="flex w-full items-center justify-between px-5">
+            <div className="text-admin-sub text-sm font-medium">
+              지원서 검토 변경
+            </div>
+            <img src={MobileArrow} alt="MobileArrow" className="h-2 w-3" />
+          </div>
         </div>
-      </div>
-
-      {isOpen && (
-        <div className="bg-admin-box text-admin-sub absolute top-11 z-50 flex h-20 w-28 flex-col items-center justify-around rounded-[10px] text-sm font-medium shadow-lg">
-          <div
-            className="hover:text-admin-blue w-19.75 cursor-pointer"
-            onClick={() => {
-              if (!selectedId) {
-                alert("검토 변경할 지원서를 선택해주세요.");
-                return;
-              } else {
-                setIsOpenModal(true);
-                setReviewState("PASS");
-              }
-            }}
-          >
-            PASS
-          </div>
-          <div
-            className="hover:text-admin-red w-19.75 cursor-pointer"
-            onClick={() => {
-              if (!selectedId) {
-                alert("검토 변경할 지원서를 선택해주세요.");
-                return;
-              } else {
-                setIsOpenModal(true);
-                setReviewState("FAIL");
-              }
-            }}
-          >
-            FAIL
-          </div>
-          <div
-            className="w-19.75 cursor-pointer hover:text-[#F8D90E]"
-            onClick={() => {
-              if (!selectedId) {
-                alert("검토 변경할 지원서를 선택해주세요.");
-                return;
-              } else {
-                setIsOpenModal(true);
-                setReviewState("HOLD");
-              }
-            }}
-          >
-            HOLD
+      ) : (
+        <div
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="bg-admin-box flex h-9 w-28 cursor-pointer items-center justify-center rounded-[10px] text-sm font-medium text-white hover:opacity-70"
+        >
+          <div className="flex items-center gap-4.25">
+            검토 변경
+            <img
+              className={`h-1.5 w-2.5 transition-transform duration-300 ${
+                isOpen ? "rotate-180" : ""
+              }`}
+              src={Vector2}
+              alt="Vector2"
+            />
           </div>
         </div>
       )}
+
+      {isMobile ? (
+        <>
+          {isOpen && (
+            <div className="bg-admin-box text-admin-sub absolute top-11 z-50 flex h-20 w-full flex-col items-center justify-around rounded-[10px] text-sm font-medium shadow-lg">
+              <div
+                className="hover:text-admin-blue cursor-pointer justify-center"
+                onClick={() => {
+                  if (!selectedId) {
+                    alert("검토 변경할 지원서를 선택해주세요.");
+                    return;
+                  } else {
+                    setIsOpenModal(true);
+                    setReviewState("PASS");
+                  }
+                }}
+              >
+                PASS
+              </div>
+              <div
+                className="hover:text-admin-red cursor-pointer justify-center"
+                onClick={() => {
+                  if (!selectedId) {
+                    alert("검토 변경할 지원서를 선택해주세요.");
+                    return;
+                  } else {
+                    setIsOpenModal(true);
+                    setReviewState("FAIL");
+                  }
+                }}
+              >
+                FAIL
+              </div>
+              <div
+                className="cursor-pointer justify-center hover:text-[#F8D90E]"
+                onClick={() => {
+                  if (!selectedId) {
+                    alert("검토 변경할 지원서를 선택해주세요.");
+                    return;
+                  } else {
+                    setIsOpenModal(true);
+                    setReviewState("HOLD");
+                  }
+                }}
+              >
+                HOLD
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {" "}
+          {isOpen && (
+            <div className="bg-admin-box text-admin-sub absolute top-11 z-50 flex h-20 w-28 flex-col items-center justify-around rounded-[10px] text-sm font-medium shadow-lg">
+              <div
+                className="hover:text-admin-blue w-19.75 cursor-pointer"
+                onClick={() => {
+                  if (!selectedId) {
+                    alert("검토 변경할 지원서를 선택해주세요.");
+                    return;
+                  } else {
+                    setIsOpenModal(true);
+                    setReviewState("PASS");
+                  }
+                }}
+              >
+                PASS
+              </div>
+              <div
+                className="hover:text-admin-red w-19.75 cursor-pointer"
+                onClick={() => {
+                  if (!selectedId) {
+                    alert("검토 변경할 지원서를 선택해주세요.");
+                    return;
+                  } else {
+                    setIsOpenModal(true);
+                    setReviewState("FAIL");
+                  }
+                }}
+              >
+                FAIL
+              </div>
+              <div
+                className="w-19.75 cursor-pointer hover:text-[#F8D90E]"
+                onClick={() => {
+                  if (!selectedId) {
+                    alert("검토 변경할 지원서를 선택해주세요.");
+                    return;
+                  } else {
+                    setIsOpenModal(true);
+                    setReviewState("HOLD");
+                  }
+                }}
+              >
+                HOLD
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
       {isOpenModal && (
         <Modal>
           <Modal.TextLayout>
