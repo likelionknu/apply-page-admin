@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import AdminLoginPage from "../features/main/pages/AdminLoginPage";
 import AdminUserListPage from "@userlist/pages/AdminUserListPage";
 import AdminAnnouncementManagementPage from "../features/status/pages/AdminAnnouncementManagementPage";
@@ -8,9 +9,20 @@ import AdminAnnouncementCreatePage from "../features/announce/pages/AdminAnnounc
 import AdminAnnouncementEditPage from "@announce/pages/AdminAnnouncementEditPage";
 import GoogleCallback from "@shared/apis/GoogleCallBack";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname]);
+
+  return null;
+}
+
 function AppRouter() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<GoogleCallback />} />
         <Route path="/login" element={<AdminLoginPage />} />
