@@ -152,7 +152,7 @@ const AdminSpecificAnnouncementPage = () => {
   return (
     <div className="flex justify-center bg-black">
       <Header />
-      <div className="mb-10 flex h-full w-[calc(100vw-52px)] flex-col items-center bg-black lg:mb-0 lg:h-500 lg:w-298.5">
+      <div className="mb-10 flex h-full w-[calc(100vw-52px)] flex-col items-center bg-black lg:w-298.5">
         <div className="mt-24 flex w-full flex-col lg:mt-35.5 lg:flex-row lg:justify-between">
           <div className="justify-start text-2xl font-medium text-white lg:line-clamp-1 lg:text-3xl">
             {announcement.title}
