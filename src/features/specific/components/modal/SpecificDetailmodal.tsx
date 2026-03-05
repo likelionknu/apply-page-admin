@@ -139,7 +139,7 @@ export default function SpecificDetailModal({
             {!isLoading && !errorMessage && currentApplication && (
               <>
                 {/* 지원자 기본 정보 */}
-                <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-3 select-text">
                   {detailFields.map((field) => (
                     <SpecificDetailField
                       key={field.label}
